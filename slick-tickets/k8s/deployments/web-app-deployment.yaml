@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-deployment
+  labels:
+    component: web-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: web-app
+  template:
+    metadata:
+      labels:
+        component: web-app
+    spec:
+      containers:
+      - name: nginx
+        image: gcr.io/gcp-designers-development/web-app:v0.2
+        ports:
+        - containerPort: 3000

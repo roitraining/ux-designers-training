@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-deployment
+  labels:
+    component: events
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: events
+  template:
+    metadata:
+      labels:
+        component: events
+    spec:
+      containers:
+      - name: nginx
+        image: gcr.io/gcp-designers-development/events-service:v0.1
+        ports:
+        - containerPort: 3000

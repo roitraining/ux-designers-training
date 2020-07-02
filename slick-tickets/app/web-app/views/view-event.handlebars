@@ -1,0 +1,45 @@
+<h1>{{this.name}}</h1>
+<p>{{this.description}}</p>
+
+{{#if this.userIsRegistered}}
+
+<p>My Ticket</p>
+<p>
+  <a href="/print-ticket/{{this.slug}}" target="_blank"><button class="btn">Print</button></a>
+  <button data-target="mail-modal" class="btn modal-trigger">Mail</button>
+
+  <div id="mail-modal" class="modal">
+    <div class="modal-content">
+      <h4>Enter Your Address</h4>
+      <form>
+        <input type="text" placeholder="Street Address">
+        <input type="text" placeholder="City">
+        <input type="text" placeholder="State">
+        <input type="text" placeholder="Zip">
+      </form>
+      <p>Submit your address and your tickets will be mailed to you. (But not really.)</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Submit</a>
+    </div>
+  </div>
+</p>
+
+{{else}}
+
+<p><a href="/user/register/{{this.slug}}">Register</a></p>
+
+{{/if}}
+
+{{#if user.isAdmin}}
+<hr>
+<h1>Administer Event</h1>
+<a href="/events/delete/{{this.slug}}">Delete Event</a>
+<h3>Update Event</h3>
+<form action="/events/update/{{this.slug}}" method="post">
+  <input name="name" type="text" value="{{this.name}}" required>
+  <input name="description" type="text" value="{{this.description}}">
+  <input name="slug" type="text" value="{{this.slug}}" required>
+  <input type="submit" value="Post">
+</form>
+{{/if}}

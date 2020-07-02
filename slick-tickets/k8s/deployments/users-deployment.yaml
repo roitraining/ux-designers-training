@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+  labels:
+    component: users
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: users
+  template:
+    metadata:
+      labels:
+        component: users
+    spec:
+      containers:
+      - name: nginx
+        image: gcr.io/gcp-designers-development/users-service:v0.1
+        ports:
+        - containerPort: 3000

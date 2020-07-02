@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Slick Tickets</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="/main.css">
+
+  <!--Let browsers know this website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="brand-logo">Slick Tickets</a>
+        <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/events">Events</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+          {{#if user}}
+          <li><a href="/my-events">My Events</a></li>
+          {{#if user.isAdmin}}
+          <li><a href="/create-event">Create Event</a></li>
+          <li><a href="/users">Users</a></li>
+          {{/if}}
+          <li><a href="/logout">Logout</a></li>
+          {{else}}
+          <li><a href="/login">Login</a></li>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <ul class="sidenav" id="mobile-nav">
+    <li><a href="/events">View Events</a></li>
+    <li><a href="/create-event">Create Events</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+
+  <div class="container">
+
+    {{{body}}}
+
+  </div>
+
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Slick Tickets</h5>
+          <p class="grey-text text-lighten-4">See the links to the right to learn more about Slick Tickets or contact us!</p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+          <h5 class="white-text">Links</h5>
+          <ul>
+            <li><a class="grey-text text-lighten-3" href="/about">About</a></li>
+            <li><a class="grey-text text-lighten-3" href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      © 2020 Copyright Slick Tickets
+      </div>
+    </div>
+  </footer>
+
+  <!-- Included at the bottom for optimization rather than good organization. -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/main.js"></script>
+</body>
+</html>
