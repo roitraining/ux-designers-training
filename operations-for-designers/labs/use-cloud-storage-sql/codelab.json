@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-05-16T12:36:35-07:00",
+  "id": "use-cloud-storage-sql",
+  "duration": 115,
+  "title": "Use Cloud Storage and SQL",
+  "authors": "Jordan Hart",
+  "summary": "Use Cloud Storage and SQL from a VM",
+  "source": "04-use-cloud-storage-sql.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "operations for uxers"
+  ],
+  "tags": [
+    "google cloud"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform",
+  "url": "use-cloud-storage-sql"
+}

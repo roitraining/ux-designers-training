@@ -1,0 +1,129 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Deploy a VM with Agents</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="deploy-vm-with-agents"
+                  title="Deploy a VM with Agents"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
+<ul class="checklist">
+<li>How to create a Google Compute Engine virtual machine using the GUI</li>
+<li>How to install the Logging and Monitoring agents</li>
+<li>How to deploy a basic web application</li>
+<li>How to view logs and metrics</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create a VM" duration="3">
+        <p>Choose a Google Cloud Project to work in.<br>Navigate to Compute Engine Instances.<br>Click <strong>Create</strong> or <strong>CREATE INSTANCE</strong> (the former is if you have no VMs currently).<br>Name the VM ‘agents-sample&#39;.<br>Near the bottom of the form, check the box to <strong>Allow HTTP traffic</strong>.<br>Click <strong>Create</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Deploy a Basic Web Application" duration="20">
+        <p>While in the SSH window for your VM, run the following commands to install Nodejs:</p>
+<pre><code>sudo apt update
+sudo apt install nodejs npm
+node -v
+</code></pre>
+<p>Create a directory to run the app from and move into it:</p>
+<pre><code>mkdir ~/my-app
+cd ~/my-app
+</code></pre>
+<p>Initialize NPM (Node Package Manager):</p>
+<pre><code>npm init
+</code></pre>
+<p>Take the default option for index.js by simply hitting Return.</p>
+<p>Install Express (an MVC framework and webserver):</p>
+<pre><code>npm install express --save
+</code></pre>
+<p>Create a very simple hello world example app:</p>
+<pre><code>nano index.js
+</code></pre>
+<p>Paste in the following JavaScript:</p>
+<pre><code>const express = require(&#39;express&#39;)
+const app = express()
+const port = 80
+
+app.get(&#39;/&#39;, (req, res) =&gt; res.send(&#39;Hello World!&#39;))
+
+app.listen(port, () =&gt; console.log(`Example app listening at http://localhost:${port}`))
+</code></pre>
+<p>Type Ctrl-O and return to save and then Ctrl-X to exit the Nano text editor.</p>
+<p>Run the application:</p>
+<pre><code>sudo node index
+</code></pre>
+<p>Go back to the GCE GUI and click the VM&#39;s external IP address; it should be linkified if you checked the box for ‘Allow HTTP Access.&#39;</p>
+<p><strong>Important Note:</strong> Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Monitoring and Logging" duration="10">
+        <h2 is-upgraded>Monitoring</h2>
+<p>Go to <strong>Monitoring</strong> in the GUI.<br>Select <strong>Metrics Explorer</strong>.<br>Search for ‘compute cpu&#39; and try both the version from the agent and from compute. Since you have not installed the agent, you won&#39;t get any data from it.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install the Monitoring Agent" duration="10">
+        <p>SSH into your VM.<br>Follow the <a href="https://cloud.google.com/monitoring/agent/install-agent#agent-install-debian-ubuntu" target="_blank">official documentation</a> for Debian (the default flavor of Linux on GCE). The notes below will help you navigate the process.<br><strong>Notes:</strong></p>
+<ul>
+<li>If you created the VM, you should have sudo access, which is root (admin) privilege</li>
+<li>To start in your home directory as recommended, type:<pre><code>cd ~
+</code></pre>
+<ul>
+<li>On step 4, run the commands one by one.</li>
+<li>Review the instructions on pinning a major version for production environments, but for our purposes the final command for installing the latest version will suffice (sudo apt-get install stackdriver-agent)</li>
+<li>You do not need to move on to optional tasks</li>
+</ul>
+Wait a minute and then go to Monitoring and see if you are getting CPU utilization from the agent now.<h2 is-upgraded>Logging</h2>
+Go to <strong>Logging</strong> in the GUI.<br>Select your project, <strong>‘GCE Project, XXXXX&#39;</strong>.<br>You might expect a log entry for ‘Example app listening at...&#39; but you won&#39;t see it. Installing the Logging Agent would give you more system logs, but you still wouldn&#39;t see console.log from Node.js. While this would work in managed services, for GCE you would need to use an explicit logging client library. Generally you would use both the Logging agent and a logging library.Install the Logging agent by following <a href="https://cloud.google.com/logging/docs/agent/installation#agent-install-debian-ubuntu" target="_blank">the official guide</a> for Debian. The steps are very similar to the steps to install the Monitoring agent. However there is an extra configuration step, while either option will work choose structured logging for better organization.Next install a logging library and connect it to Cloud Logging follow the <a href="https://cloud.google.com/logging/docs/setup/nodejs" target="_blank">official guide</a> for Node.js. After you have the NPM package installed and you have put the configuration code near the top of index.js, you can change your app.listen callback to use the new logger:<pre><code>app.listen(port, () =&gt; logger.info(`Example app listening at http://localhost:${port}`))
+</code></pre>
+</li>
+</ul>
+<p>After making the change and starting the app, go back to Cloud Logging and you should see your log line appear. Using Node&#39;s built in console.log will only display locally for developers, but logger.info will go to the logging tool.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cleanup" duration="1">
+        <p>Don&#39;t forget to delete your VM when you are done with the lab. If you want to be able to reference it later, you can stop it instead of deleting it. You will still be charged for storing the disk, but it is a minimal charge compared to leaving a VM running.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

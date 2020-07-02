@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-04-27T08:33:48-07:00",
+  "id": "monitor-cloud-storage",
+  "duration": 36,
+  "title": "Monitor Cloud Storage",
+  "authors": "Jordan Hart",
+  "summary": "Monitor Cloud Storage",
+  "source": "03-monitor-cloud-storage.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "operations for uxers"
+  ],
+  "tags": [
+    "google cloud"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform",
+  "url": "monitor-cloud-storage"
+}

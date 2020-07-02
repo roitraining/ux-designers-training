@@ -1,0 +1,167 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Create and List VMs with the CLI and API</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="create-vm-api-cli"
+                  title="Create and List VMs with the CLI and API"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform">
+    
+      <google-codelab-step label="Create and List a VM with the CLI" duration="3">
+        <h2 is-upgraded>Create a VM by CLI</h2>
+<p>Open Cloud Shell and run the following command:</p>
+<pre><code>gcloud compute instances create cli-example-vm --zone=us-central1-a
+</code></pre>
+<h2 is-upgraded>List VMs by CLI</h2>
+<p>After a minute or two, you should see your VM when listing VMs with the following command:</p>
+<pre><code>gcloud compute instances list
+</code></pre>
+<h2 is-upgraded>Documentation</h2>
+<p>gcloud Documentation:<br><a href="https://cloud.google.com/sdk/gcloud/reference/compute/instances/create" target="_blank">https://cloud.google.com/sdk/gcloud/reference/compute/instances/create</a></p>
+<p>GCE Documentation:<br><a href="https://cloud.google.com/compute/docs/instances/create-start-instance#startinstancegcloud" target="_blank">https://cloud.google.com/compute/docs/instances/create-start-instance#startinstancegcloud</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configure NPM" duration="5">
+        <h2 is-upgraded>Setup Your Working Directory</h2>
+<p>Open Cloud Shell, create a working directory,and move into it:</p>
+<pre><code>mkdir infra-scripts
+cd infra-scripts
+</code></pre>
+<p><strong>Tip:</strong> When referencing an existing file or folder in bash, you can &#34;tab-complete&#34; to avoid typing the entire thing. Type enough characters to be unique, then press the Tab key. If there are multiple items that start with those characters, the options will be printed on the screen for you so you can complete enough characters and then hit Tab again.</p>
+<h2 is-upgraded>What&#39;s NPM?</h2>
+<p>NPM is the primary tool used with Node.js to install packages, run scripts, and more. It used to mean Node Package Manager, but like the artist formerly known as Prince, the NPM team didn&#39;t feel that adequately expressed their true nature. It no longer stands for anything in particular.</p>
+<p>Since Cloud Shell comes with gcloud installed and configured, and Node.js and NPM installed, we can jump right to using NPM.</p>
+<h2 is-upgraded>Init NPM and Install Client Libraries</h2>
+<p>To get started with NPM, init your current directory as an NPM project:</p>
+<pre><code>npm init
+</code></pre>
+<p>Just hit Return through all the prompts taking the defaults. In a real project, you would fill at least some of the fields out and probably be inside of a folder managed by Git.</p>
+<p>Next use NPM to install the Google Cloud client libraries for Node:</p>
+<pre><code>npm install --save @google-cloud/compute
+npm install --save googleapis
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="List VMs with the API" duration="20">
+        <h2 is-upgraded>Create a List VMs Script</h2>
+<p>Next create a JavaScript file to use for our list VMs script:</p>
+<pre><code>touch list-vms.js
+</code></pre>
+<p>Then use Nano to edit it:</p>
+<pre><code>nano list-vms.js
+</code></pre>
+<p>While leaving that open and ready to paste into, in a different browser tab review this page:<br><a href="https://cloud.google.com/compute/docs/tutorials/nodejs-guide" target="_blank">https://cloud.google.com/compute/docs/tutorials/nodejs-guide</a></p>
+<p>Read as much of it as you want, then copy the contents of &#34;[t]he complete example&#34; at the bottom.</p>
+<p>Paste that into Cloud Shell where you still have Nano open and are editing list-vms.js.</p>
+<p>Use Ctrl-O to save (write out), and hit Return when the existing filename is shown to you. Next use Ctrl-X to exit Nano.</p>
+<h2 is-upgraded>Try Running Your Script</h2>
+<p>Finally, run your script with Node.js using the following bash command:</p>
+<pre><code>node list-vms.js
+</code></pre>
+<p>You would expect to see a list of VMs, but you won&#39;t. This example script defines a function but it is never actually run.</p>
+<h2 is-upgraded>Troubleshoot and Improve Your Script</h2>
+<p>To make it run, you have to edit list-vms.js with Nano, and add this line to the bottom:</p>
+<pre><code>listVMs()
+</code></pre>
+<p>After saving (Ctrl-O, then Return) and exiting Nano (Ctrl-X), use the previous bash command to again run the script with Node.js. This time, you should see an output, but it is not super helpful because the real information is hidden deep within objects and arrays whose contents are not even shown.</p>
+<p>To make it more useful, edit the script again. This time change the console log near the bottom of the script; currently it says:</p>
+<pre><code>  console.log(&#39;VMs:&#39;, vms);
+</code></pre>
+<p>Replace that line with this version that is more useful:</p>
+<pre><code>console.log(&#39;us-central1-a VMs:&#39;, vms.items[&#39;zones/us-central1-a&#39;].instances);
+</code></pre>
+<p><strong>Note:</strong> If you chose to change the zone you were using earlier in this lab, then you&#39;ll have to change the zone here also.</p>
+<p>Save it and run it again; this time you should see a list of your VMs. It may still be difficult to read, but if you look carefully, you should see your VMs there with their names and other information.</p>
+<h2 is-upgraded>Pain Point!</h2>
+<p>Especially when getting started, documentation fails to produce the desired results. It can be extremely frustrating, especially in a proof of concept where devs, devops, and ops are all evaluating a platform to see if they can trust it.</p>
+<p>Remember that to many modern IT folks, the real &#34;GUI&#34; is actually this documentation and these tutorials. This is the literal visual interface they use when trying to use the platform via API or CLI. If they were using an orchestration tool like Terraform, then they would use this documentation:<br>https://www.terraform.io/docs/providers/google/index.html</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create a VM with the API" duration="10">
+        <h2 is-upgraded>Write and Run a Script that Creates a VM</h2>
+<p>Create a new JavaScript file and edit it with Nano:</p>
+<pre><code>touch create-vm.js
+nano create-vm.js
+</code></pre>
+<p>Paste in the following JavaScript:</p>
+<pre><code>const Compute = require(&#39;@google-cloud/compute&#39;);
+const compute = new Compute();
+const zone = compute.zone(&#39;us-central1-a&#39;);
+
+//-
+// Create a new instance using the latest Debian version as the source image
+// for a new boot disk.
+//-
+const config = {
+  os: &#39;debian&#39;,
+  http: true,
+  tags: [&#39;debian-server&#39;]
+};
+
+//-
+// If the callback is omitted, we&#39;ll return a Promise.
+//-
+zone.createVM(&#39;api-test-vm&#39;, config).then(function(data) {
+  const vm = data[0];
+  const operation = data[1];
+  const apiResponse = data[2];
+});
+</code></pre>
+<p>Save and exit Nano (Ctrl-O, Return, Ctrl-X), then run your new script:</p>
+<pre><code>node create-vm.js
+</code></pre>
+<p>Give it a minute or two, then run your list script to see the new VM:</p>
+<pre><code>node list-vms.js
+</code></pre>
+<p>List them with the CLI as well:</p>
+<pre><code>gcloud compute instances list
+</code></pre>
+<p>Note that our simple scripts to create and list VMs are not really more useful than the built-in gcloud CLI commands. They are just simple examples. In the real world, you&#39;d likely use the CLI for simple commands like this, and the API for complex custom interactions. Or even more likely than both, all major infrastructure would be managed with an orchestration tool like Terraform or Deployment Manager.</p>
+<h2 is-upgraded>Pain Point!</h2>
+<p>I could not reasonably have you use <a href="https://googleapis.dev/nodejs/compute/latest/VM.html#create-examples" target="_blank">the documentation</a> because the sample script there required too much modification. The createVM <a href="https://googleapis.dev/nodejs/compute/latest/Zone.html#createVM-examples" target="_blank">example</a> under Zone was closer to being directly usable, but still required some strange modification.</p>
+<p>Most developers would be able to quickly parse the code and figure out how to properly modify it. But to a new or impatient developer it could be very frustrating, and is in general a common frustration.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cleanup" duration="1">
+        <p>Don&#39;t forget to delete your VMs when you are done with the lab. If you want to be able to reference it later, you can stop it instead of deleting it. You will still be charged for storing the disk, but it is a minimal charge compared to leaving a VM running. Of course, the beauty of having scripts is that you could always easily recreate the VMs in a new context!</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

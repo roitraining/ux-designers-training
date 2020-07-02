@@ -1,0 +1,283 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Use Cloud Storage and SQL</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="use-cloud-storage-sql"
+                  title="Use Cloud Storage and SQL"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
+<ul class="checklist">
+<li>Creating a VM with proper scopes for Cloud SQL and Storage</li>
+<li>How to interact with Cloud Storage from a VM</li>
+<li>How to interact with Cloud SQL from a VM</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create a VM with Proper Scopes" duration="3">
+        <h2 is-upgraded>Create a VM by CLI with the Scopes We Need</h2>
+<p>Open Cloud Shell and run the following command:</p>
+<pre><code>gcloud compute instances create storage-sql-example --zone=us-central1-a --scopes=sql-admin,storage-rw
+</code></pre>
+<p><strong>Important Note</strong><br>By default VMs on GCE come with a Default Service Account that has Project Editor access. That is way overkill for a typical application, but fortunately also by default the VM&#39;s ability to act against Google Cloud&#39;s APIs is further limited by scopes (this is only true when using the Compute Engine Default Service Account). Those scopes, by default, are set to allow writing to Cloud Operations, reading from Cloud Storage, and not much else. Here we are specifying read/write access to Cloud Storage and access to Cloud SQL.</p>
+<p>It would be possible to connect to Cloud SQL without this scope, since you can whitelist your VMs IP address and then connect by normal SQL mechanisms. However, here we are going to use the Cloud SQL Proxy and authenticate through Google. You can read more about <a href="https://cloud.google.com/sql/docs/postgres/connect-compute-engine#gce-connect-proxy" target="_blank">permissions and the SQL Proxy</a> in the documentation.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Deploy a Basic Web Application" duration="20">
+        <p>Just like we did in the first lab, deploy a simple web application.</p>
+<p>While in the SSH window for your VM, run the following commands to install Nodejs:</p>
+<pre><code>sudo apt update
+sudo apt install nodejs npm
+node -v
+</code></pre>
+<p>Create a directory to run the app from and move into it:</p>
+<pre><code>mkdir ~/my-app
+cd ~/my-app
+</code></pre>
+<p>Initialize NPM (Node Package Manager):</p>
+<pre><code>npm init
+</code></pre>
+<p>Take the default option for index.js by simply hitting Return.</p>
+<p>Install Express (an MVC framework and webserver):</p>
+<pre><code>npm install express --save
+</code></pre>
+<p>Create a very simple hello world example app:</p>
+<pre><code>nano index.js
+</code></pre>
+<p>Paste in the following JavaScript:</p>
+<pre><code>const express = require(&#39;express&#39;)
+const app = express()
+const port = 80
+
+app.get(&#39;/&#39;, (req, res) =&gt; res.send(&#39;Hello World!&#39;))
+
+app.listen(port, () =&gt; console.log(`Example app listening at http://localhost:${port}`))
+</code></pre>
+<p>Type Ctrl-O and return to save and then Ctrl-X to exit the Nano text editor.</p>
+<p>Run the application:</p>
+<pre><code>sudo node index
+</code></pre>
+<p>Go back to the GCE GUI and click the VM&#39;s external IP address; it should be linkified if you checked the box for ‘Allow HTTP Access.&#39;</p>
+<p><strong>Important Note:</strong> Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Write to Cloud Storage" duration="30">
+        <h2 is-upgraded>Create a Cloud Storage Bucket for Your Application</h2>
+<p>Choose a bucket name, it has to be globally unique in all of Google Cloud Storage.</p>
+<p>Substitue in that name in the following command to create your bucket:</p>
+<pre><code>gsutil mb gs://[BUCKET_NAME]/
+</code></pre>
+<h2 is-upgraded>Install the Cloud Storage Client Library for Node.js</h2>
+<p>Go back to your SSH window, exit the app with Ctrl-C.</p>
+<p>While still in the root directory of your application, install the Node.js client library for Cloud Storage:</p>
+<pre><code>npm install @google-cloud/storage --save
+</code></pre>
+<p>Exit index.js with Nano and put the following after the port line:</p>
+<pre><code>const {Storage} = require(&#39;@google-cloud/storage&#39;)
+const storage = new Storage()
+const bucket = storage.bucket(&#39;[BUCKET_NAME]&#39;)
+</code></pre>
+<p>Save and exit, try running the app again, then exit it. We&#39;re just checking to make sure there are no errors. We&#39;ll actually use the bucket in the next step.</p>
+<h2 is-upgraded>Set Up a Route to Add a File to Cloud Storage</h2>
+<p>Create a route and controller method for our application to write the file to Cloud Storage. Add this JavaScript below your current route, app.get(‘/&#39;, ...):</p>
+<pre><code>app.get(&#39;/add-file&#39;, function (req, res) {
+    const fileName = req.query.fileName
+    const fileContents = req.query.fileContents
+    res.send(`Filename: ${fileName}, File Contents: ${fileContents}`)
+})
+</code></pre>
+<p>We are looking for query paramters (key value pairs that follow a URL after a question mark), then simply responding with text to show that our route and controller method are functioning in a basic form.</p>
+<p>Run your app again, and test out your new endpoint by visiting it in a browser like this:</p>
+<pre><code>http://[MY_VMS_IP]/add-file?fileName=hello&amp;fileContents=world
+</code></pre>
+<p>You should see a response like this:</p>
+<pre><code>Filename: hello.txt, File Contents: world
+</code></pre>
+<h2 is-upgraded>Create a File Locally</h2>
+<p>fs is a module built into Node.js so there&#39;s no need for you to install it, however, you do need to include it in index.js. Along with your other includes at the top, put this line:</p>
+<pre><code>const fs = require(&#39;fs&#39;)
+</code></pre>
+<p>Now down in your ‘add-file&#39; controller method, add the following:</p>
+<pre><code>fs.writeFile(fileName, fileContents, function (err, data) {
+  if (err) return console.log(err);
+  console.log(data);
+})
+</code></pre>
+<p>Run your app, try the endpoint, then exit the app and see if your file is there locally. After confirming it is, delete it.</p>
+<h2 is-upgraded>Add Your File as an Object to Cloud Storage</h2>
+<p>Use the documentation to modify your controller method so that after it creates the file, it uploads it to Cloud Storage:<br><a href="https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-nodejs" target="_blank">https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-nodejs</a>.</p>
+<p><strong>Tips</strong></p>
+<ol type="1">
+<li>It&#39;s easier to edit the code if you use cat index.js to view the contents, copy and paste them into a text editor like Atom or VS Code. When you are done, you can copy the contents, delete index.js, and recreate it with your new contents.</li>
+<li>To make sure you are uploading the file after it has been written to local disk, be sure to do the upload inside the callback of fs.writeFile.</li>
+<li>Pay attention to the fact that we have already defined a bucket with a bucket name up in our configuration. So instead of storage.bucket(bucketName), we can just use bucket. Be sure to remove any reference to bucketName as we won&#39;t have that defined.</li>
+<li>Make sure to remove any unused files locally when you are done.</li>
+</ol>
+<p>If all went well, you should be able to navigate to your bucket in the Console and see your file on Cloud Storage!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Read Files from Cloud Storage" duration="20">
+        <h2 is-upgraded>Prepare</h2>
+<p>Use your endpoint to create a few files.</p>
+<p>Create another route and controller method, this time for reading the files from your bucket. Just start with a simple temporary route to make sure you have that part set up properly:</p>
+<pre><code>app.get(&#39;/read-file&#39;, function (req, res) {
+  const filename = req.query.filename
+  res.send(`filename: ${filename}`)
+})
+</code></pre>
+<p>Test it out just to make sure you get the response.</p>
+<h2 is-upgraded>Download File from Cloud Storage</h2>
+<p>Follow the example for downloading files from Cloud Storage:<br><a href="https://cloud.google.com/storage/docs/downloading-objects#storage-download-object-nodejs" target="_blank">https://cloud.google.com/storage/docs/downloading-objects#storage-download-object-nodejs</a></p>
+<p>Integrate this with your new controller method.</p>
+<p><strong>Tips</strong></p>
+<ol type="1">
+<li>Create a downloads folder inside your my-app folder and prepend that to your destFilename (‘./downloads/[FILENAME]‘).</li>
+<li>Like last time, we can just use bucket.upload since we&#39;ve defined bucket in the config.</li>
+</ol>
+<h2 is-upgraded>Read the Downloaded File and Respond with Its Content</h2>
+<p>Follow the example from Node.js:<br><a href="https://nodejs.dev/reading-files-with-nodejs" target="_blank">https://nodejs.dev/reading-files-with-nodejs</a>.</p>
+<p>Integrate this with your new controller method.</p>
+<p><strong>Tips</strong></p>
+<ol type="1">
+<li>You can use a relative filepath: ./downloads/[FILENAME], and you probably already have this available as destFilename.</li>
+<li>Do this after the await line, since that will fire only after the file has been downloaded.</li>
+<li>Move your res.send to after the file has been read, and respond with the file contents (called data in the example code) instead of the filename.</li>
+</ol>
+<p>If all went well, you should be able to start the app back up and use your /read-file endpoint to get the contents of a file on Cloud Storage.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Writing to Cloud SQL" duration="30">
+        <h2 is-upgraded>Create a Cloud SQL Instance</h2>
+<p>Use the gcloud CLI from Cloud Shell to create a Postgres Cloud SQL instance:</p>
+<pre><code> gcloud sql instances create lab-example --database-version=POSTGRES_11 --cpu=1 --memory=3840MiB --region=&#34;us-central&#34;
+</code></pre>
+<p>Use the console to create a user for yourself. Navigate to the <strong>Users</strong> page and create a user.</p>
+<h2 is-upgraded>Install, Configure, and Execute the Cloud SQL Proxy for Linux 64-bit</h2>
+<p>Go back to your SSH session, and if you haven&#39;t already, stop the app from running.</p>
+<p>Move back to your home folder and install wget so you can download files easily:</p>
+<pre><code>sudo apt update
+sudo apt install wget
+</code></pre>
+<p>Follow the official how-to guide:<br><a href="https://cloud.google.com/sql/docs/postgres/authorize-proxy" target="_blank">https://cloud.google.com/sql/docs/postgres/authorize-proxy</a>.</p>
+<p><strong>Tips</strong></p>
+<ol type="1">
+<li>Your VM already has a Service Account with the Project Editor role, and when you created it you added a scope to allow Cloud SQL access, so you don&#39;t have to worry about the IAM portion. So after the installation section, you can move down the execution section.</li>
+<li>When you start (execute) the proxy use TCP and the port 5432 (standard for Postgres, though not required).</li>
+<li>You can find the INSTANCE_CONNECTION_NAME in the overview of the instance in the Google Cloud Console under <strong>Connect to this instance</strong>.</li>
+</ol>
+<p>Once you have it running, leave it running in that SSH window and open up a new one to continue working in.</p>
+<h2 is-upgraded>Set Up a Database and Table</h2>
+<p>Visit your instance in the Google Cloud Console and click <strong>Databases</strong>, then create a database called ‘communication.&#39;</p>
+<p>Next go back to your new SSH session and install a Postgres client for Debian:</p>
+<pre><code>sudo apt update
+sudo apt install postgresql postgresql-client
+psql --version
+</code></pre>
+<p>Connect to your Cloud SQL instance using the psql client (be sure to use the username you created earlier):</p>
+<pre><code>psql &#34;host=127.0.0.1 port=5432 sslmode=disable dbname=postgres user=[YOUR_USER_NAME]&#34;
+</code></pre>
+<p>Use the following SQL query to create a table called ‘messages&#39;:</p>
+<pre><code>CREATE TABLE messages(
+	message_id serial PRIMARY KEY,
+	message_text VARCHAR (255) NOT NULL
+);
+</code></pre>
+<p>To confirm that the table exists, you can run:</p>
+<pre><code>\dt
+</code></pre>
+<p>Leave that window open, and open yet another SSH window to edit your application.</p>
+<h2 is-upgraded>Writing to Cloud SQL from Our Application</h2>
+<p>The beauty of Cloud SQL, aside from being an easy to use managed service, is that it runs standard versions of SQL (Postgres, MySQL, and SQL Server) and offers the SQL Proxy for easy connection. That means that all we have to do now is install a standard Postgres client library and connect on localhost (127.0.0.1)! This name and IP are both ways for a computer to simply refer to itself in networking. The Cloud SQL Proxy pretends that it is a local database, but instead proxies the connections over to the remote instance.</p>
+<p>First let&#39;s set up another route and controller method to test writing to Cloud SQL. Call this route ‘/write-sql&#39; and have it expect a query parameter called message:</p>
+<pre><code>app.get(&#39;/add-message&#39;, function (req, res) {
+  const message = req.query.message
+  res.send(message)
+})
+</code></pre>
+<p>Let&#39;s start by installing a Postgres client for Node.js. In your new SSH window, navigate back to your my-app folder then install the <a href="https://www.npmjs.com/package/pg" target="_blank">client</a>:</p>
+<pre><code>npm install pg --save
+</code></pre>
+<p>Next follow the <a href="https://node-postgres.com/" target="_blank">documentation</a> to get it set up in index.js. Unless you are comfortable with async and await, I recommend you use the callback version. We&#39;ll replace the specific query in a moment.</p>
+<p><strong>Important Note</strong><br>You are about to be instructed to put a password into application code in plain text. In the real world, you should never do that, and especially never checkin such code to Git. Also, be sure not to use any real passwords here, simple passwords like ‘test&#39; are fine for this lab. Go back to the console and change the password for your user if necessary.</p>
+<p>Be sure to pass a configuration object when creating the client like this:</p>
+<pre><code>const client = new Client({
+  host: &#39;localhost&#39;,
+  database: &#39;postgres&#39;,
+  port: 5432,
+  user: &#39;[MY_USERNAME]&#39;,
+  password: &#39;[MY_PASSWORD]&#39;,
+})
+</code></pre>
+<p>Back down in the controller method, you should end up with something like this:</p>
+<pre><code>client.query(queryString, (err, res) =&gt; {
+  client.end()
+})
+</code></pre>
+<p>I defined the variable queryString up above, that&#39;s where you&#39;ll want to put your SQL query to insert this message as message_text into the messages table. If you need some help forming that query, checkout a <a href="https://www.postgresqltutorial.com/postgresql-insert/" target="_blank">simple tutorial</a>.</p>
+<p>Remember to use the message you get from the query parameter.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Reading from Cloud SQL" duration="10">
+        <p>At this point you should have a sense of how to work through this process. Try going through the steps on your own:</p>
+<ol type="1">
+<li>Create a placeholder route and controller method for ‘/read-messages&#39;.</li>
+<li>Use the same SQL client to query the DB for all messages.</li>
+<li>Use the res object to respond with a string that contains all messages.</li>
+</ol>
+<p>If you need help forming the query, <a href="https://www.postgresqltutorial.com/postgresql-select/" target="_blank">here is another tutorial</a>.</p>
+<p>And of course, if you need further help, just ask your instructor.</p>
+<p>If you got it all working, congratulations! You can now read and write to both Cloud Storage and Cloud SQL from application code.</p>
+<p>If you have extra time, feel free to try out more complex queries!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cleanup" duration="1">
+        <p>Don&#39;t forget to delete your VM, Cloud SQL Instance, and Cloud Storage Bucket when you are done with the lab. If you want to be able to reference it later, you can stop the VM and Cloud SQL Instance instead of deleting them, and you can leave the Cloud Storage Bucket which will have a very minimal charge as long as you didn&#39;t put much on it.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
