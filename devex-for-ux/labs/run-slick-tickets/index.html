@@ -1,0 +1,87 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Run Slick Tickets</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="run-slick-tickets"
+                  title="Run Slick Tickets"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
+<ul class="checklist">
+<li>Running an application built with microservice architecture</li>
+<li>Handling service discovery in microservice applications</li>
+<li>About the sample app, Slick Tickets, that we&#39;ll be using throughout the rest of this course and in the next course</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Preparing the Environment" duration="10">
+        <h2 is-upgraded>Clone the Repo to Cloud Shell</h2>
+<p>If you haven&#39;t already, create a Git folder in your home directory and move into it. Clone Slick Tickets:</p>
+<pre><code>gcloud source repos clone slick-tickets --project=gcp-designers-development
+</code></pre>
+<p>Take a moment and explore the code. Read the README and take a look at the web app and at each microservice.</p>
+<h2 is-upgraded>Install Dependencies</h2>
+<p>Make sure that NPM is up to date:</p>
+<pre><code>npm install -g npm
+</code></pre>
+<p>This is a strange command where NPM updates itself globally. If it is not up to date, you will get a message to run this command when running npm install.</p>
+<p>Open two additional tabs in Cloud Shell so you can interact with the web app and each of the two microservices in separate tabs. In each tab, navigate to a different one of those folders inside of the app folder.</p>
+<p>Follow the instructions in the README to get the environment ready to run, but read the next section before actually running the services.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run the App" duration="15">
+        <h2 is-upgraded>Service Discovery</h2>
+<p>Since we are now dealing with two microservices and a presentation tier web app, we have to concern ourselves with service discovery. How do our three components find each other?</p>
+<p>For now, we are going to use a simple strategy of manually configured environmental variables. There are more complex methodologies, some built into Kubernetes, Istio/Anthos has its own strategy involving the Envoy Proxy, and there are others.</p>
+<p>Also since we are running on a single VM (Cloud Shell), the three components can find each other on localhost at whatever port each is running on. The web app should run on port 8080, since that is the publically exposed piece we will preview on. The other two can run on 3001 and 3002, or any high (in the thousands) number port you choose. The key is that whatever you choose for the two microservices, the web app needs to know about it.</p>
+<h2 is-upgraded>Start the Services</h2>
+<p>With this in mind, adjust your .env files as needed, and run all three components. You should then be able to preview the web tier and use the application.</p>
+<p>Follow the instructions in the README to create an account and make yourself an administrator. Then as an administrator, you can create events. Create a second account to use to test the end user experience, and try registering for an event and printing a ticket.</p>
+<h2 is-upgraded>BONUS: Add Your Own Repository and Make a Change</h2>
+<p>Create a new repository for your version of the app. Add the remotes from the root directory of the repo where you&#39;ve cloned it in Cloud Shell. To add the remotes, follow <a href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes" target="_blank">the official Git documentation</a>.</p>
+<p>Make sure to name your new remote something clear that you&#39;ll remember. In the past when we&#39;ve used commands like &#34;git push origin master&#34;, the word &#34;origin&#34; was the name of the remote we were pushing or pulling. Now with multiple remotes, you&#39;ll be able to push and pull from either. That way you can pull updates from the main repo (origin) and push and pull to your own as well.</p>
+<p>Create a new feature branch for the change you&#39;d like to make, make the change, and then merge the change into master. Restart any of the three components you made a change to, and preview to see that the change worked. Make sure to push both the feature branch and master up to your remote.</p>
+<p>If you make some cool changes during or after these courses, let Jordan know (jordanmhart@gmail.com) and he can integrate them into the main repo. Normally this would be done with a pull request, which would be a great feature for Cloud Source Repos (see the pain point from the previous lab). :)</p>
+<h2 is-upgraded>ANOTHER BONUS: Run Slick Tickets on GCE</h2>
+<p>If you still have time, try running Slick Tickets on a VM. Combine your knowledge from the first lab where we ran a simplistic sample app, and what you learned here, and run each component on a separate VM. Run the two microservices first, so you have their IP addresses handy when you run the web tier.</p>
+<p>In this case, all three components will be running on port 80, either because you started them manually on port 80, or because you followed the nginx instructions and used nginx as a reverse proxy.</p>
+<p>In the real world, you would run them securely on port 443 using an SSL cert.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Run Slick Tickets on GKE</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="run-on-gke"
+                  title="Run Slick Tickets on GKE"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
+<ul class="checklist">
+<li>Containerizing a microservice application</li>
+<li>Running a microservice application on GKE</li>
+<li>Handling service discovery in Kubernetes</li>
+<li>Releasing changes via Docker and Kubernetes</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating a Kubernetes Cluster on GKE" duration="2">
+        <p>Go to GKE in the Google Cloud console and create a cluster. Make sure to leave it as a zonal cluster to minimize cost. The one other setting you need is to make sure that it can access Firestore, which oddly still uses Datastore naming in many places, including scopes and permissions.</p>
+<p>To enable access to Firestore and Datastore, open the <strong>Node Pool</strong> settings from the menu on the left and go to <strong>Security</strong> (make sure this is the Security nav item under Node Pools and not the one more generically under the cluster). Under <strong>Access scopes</strong>, change it to <strong>Set access for each API</strong> and then enable Datastore.</p>
+<p>Click <strong>Create</strong>. This will take some time, so while the cluster is being provisioned we&#39;ll move on to containering our application.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Containerize All Components" duration="15">
+        <h2 is-upgraded>Create Docker Images</h2>
+<p>Create a Dockerfile in the directory of each component. Each should look about like this:</p>
+<pre><code>FROM node:12-slim
+COPY . /app
+WORKDIR /app
+RUN npm install
+CMD [&#34;npm&#34;, &#34;start&#34;]
+</code></pre>
+<p>However, due to the need for Python in the web-app, use node:stretch instead of node:12-slim. If throughout these courses you add dependencies to the events or users microservices, you may need to switch to node-stretch there as well. It is heavier weight, but includes more things like Python that you may need for those dependencies.</p>
+<p>In each folder run:</p>
+<pre><code>gcloud builds submit . -t gcr.io/[PROJECT_NAME]/[IMAGE_NAME]:[TAG]
+</code></pre>
+<p>Substitute in the appropriate values for each bracketed name. Project name needs to be the project you are working in, the image name is up to you (web-app, events-service, users-service is probably good), and the tag is also up to you (starting with v0.1 is good to start).</p>
+<p>This convenient command accomplishes two things, Cloud Build will build the image for us, and then it will be pushed into Google Container Registry. Which means with this one command we are ready to deploy an image to Kubernetes.</p>
+<h2 is-upgraded>Try Running Locally in Cloud Shell</h2>
+<p>First let&#39;s test this locally in Cloud Shell, just like you did in the previous lab. However, this time instead of running the code directly, run the container instead.</p>
+<p>Get three tabs open in Cloud Shell like before, but this time to run each component use this command:</p>
+<pre><code>docker run -p [PORT]:[PORT] -i [IMAGE]
+</code></pre>
+<p>The port should just be the same port as last time; in this case it will be the same before and after the : though in most real-world cases they would be different. The first number is the one exposed externally, and it maps to the internal port which is listed second. Be sure to use the full image path with gcr.io/ and the tag and all. Here&#39;s an example:</p>
+<pre><code>docker run -p 3001:3001 -i gcr.io/gcp-designers-development/events-service:v0.1
+</code></pre>
+<p>Note that the web-app should be run on port 8080 (at least externally) so that it can be easily previewed on Cloud Shell.</p>
+<p>Now preview from Cloud Shell on port 8080 and you should see the app running. You won&#39;t be able to access the database without further configuration, but that&#39;s okay for our purposes here. Just use Ctrl-C to exit from each and we&#39;ll move on to GKE.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Deploy Your Workloads to Kubernetes" duration="15">
+        <h2 is-upgraded>Create Deployment Manifests</h2>
+<p>Create a folder in the root of your repository for Kubernetes manifest files; it&#39;s common just to call that folder k8s. Use Cloud Shell to create a deployment for each component, name them simply like users-deployment.yaml and web-app-deployment.yaml.</p>
+<p>Review the <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/" target="_blank">documentation for K8s deployments</a> and try to write the files yourself. The instructor will show you an example if you need a point of reference.</p>
+<p>Consider which port your application is listening on. And also use a label that makes sense in this situation; I would use the key &#34;component&#34; instead of &#34;app&#34; since our app is made up of three components. I&#39;m also avoiding the word &#34;service&#34; to refer to one of the microservices since service has a specific meaning in K8s.</p>
+<h2 is-upgraded>Create Service Manifests</h2>
+<p>Find the documentation for Kubernetes Services and create the YAML manifests for each. For the users and events microservices, you can use the first example you find in the official documentation which doesn&#39;t specify a type. The default type is ClusterIP which is appropriate for internal services.</p>
+<p>The web app service is a bit more complicated since we want to expose it publically. Keep scrolling down in the documentation until you find the section on LoadBalancer. This example is a bit more complex than we need, you won&#39;t need the parts about clusterIP nor the whole section on status. Port 80 is good, but for target port remember to put whatever port your app is running on internally.</p>
+<h2 is-upgraded>Apply Your Manifests</h2>
+<p>At this point it would be good to add and commit your files, and if you have your own repository set up, you can push to that remote.</p>
+<p>Connect kubectl on Cloud Shell to your cluster. Find the cluster in the console and click the <strong>Connect</strong> button next to your cluster. It will give you a prefillable command to run in Cloud Shell that will connect kubectl to your cluster.</p>
+<p>Now you are ready to apply all of the YAML files, which can be done all at once. Assuming you are in the root directory of the repo and you named your Kubernetes folder k8s, run:</p>
+<pre><code>kubectl apply -f k8s/
+</code></pre>
+<p>This will apply all Kubernetes manifests it finds in the folder, but it will not travel down into subfolders.</p>
+<p>Now spend some time inspecting what K8s is doing on your behalf. You can explore through the GUI by clicking <strong>Workloads</strong> and then <strong>Services &amp; Ingress</strong>. Next you can explore through the CLI with these commands:</p>
+<pre><code>kubectl get deployments
+kubectl get services
+</code></pre>
+<p>You can then drill down further with commands like:</p>
+<pre><code>kubectl describe deployments DEPLOYMENT_NAME
+</code></pre>
+<p>The CLI follows this very standard pattern to get, describe, and even other things like delete.</p>
+<h2 is-upgraded>Test the App!</h2>
+<p>Use kubectl to get the list of services again. This time copy the external IP of the web app service and visit it in a browser. Unfortunately, you&#39;ll find the app is broken. Think back a moment to service discovery, how does the web app know where the events and users services are hosted on K8s? They don&#39;t! Let&#39;s fix that.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Fix Service Discovery" duration="15">
+        <h2 is-upgraded>Understanding K8s and GKE Service Discovery</h2>
+<p>First read through the section on <a href="https://kubernetes.io/docs/concepts/services-networking/service/#discovering-services" target="_blank">Discovering services</a> in the Kubernetes documentation. Then read through the <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/service-discovery" target="_blank">Service discovery and DNS</a> documentation for GKE specifically.</p>
+<p>The net net for us on GKE is that we can simply find our services like this:</p>
+<pre><code>http://events-service
+</code></pre>
+<p>Pretty convenient!</p>
+<h2 is-upgraded>Redeploy the Web App Deployment</h2>
+<p>Let&#39;s rebuild our web app image for use in Kubernetes. Go in and set your .env file for the web app component so it points to the right place for both the users and events service.</p>
+<p>Now use the gcloud builds submit command, but this time with a new version tag.</p>
+<p>Next exit your K8s manifest for the web app deployment to point to the new image. Finally, reapply that file with kubectl apply and let K8s do the work for you!</p>
+<p>Refresh your browser tab that is pointed at your web app service, and now the app should be fully functional.</p>
+<p><strong>Important Note</strong><br>We are baking the environmental variables directly into the container image. That&#39;s not great, because it means the images won&#39;t necessarily play well in different environments. It&#39;s better to set those variables where it gets deployed. In the case of Kubernetes, you&#39;d do that with a feature called ConfigMaps. Keep reading to learn about those.</p>
+<h2 is-upgraded>BONUS: Using ConfigMaps</h2>
+<p>If you&#39;d like to try doing environmental variables right on K8s, delete your .env files and rebuild the images. Now they don&#39;t have those values baked right in, which is good.</p>
+<p>Instead read up on <a href="https://kubernetes.io/docs/concepts/configuration/configmap/" target="_blank">K8s ConfigMaps</a>. Note that there is a very similar feature called <a href="https://kubernetes.io/docs/concepts/configuration/secret/" target="_blank">Secrets</a> which is for information that should be encrypted, like API keys.</p>
+<p>Try creating a ConfigMap for each deployment, and then attach it using the deployment manifests. Reapply the files. Use kubectl get deployments and wait until all Pods are available and up to date. Once they are, test the app to make sure it still functions properly.</p>
+<h2 is-upgraded>BONUS: Set Up a Build Trigger</h2>
+<p>Note this will only work if you&#39;ve created your own repo.</p>
+<p>Cloud Build and Cloud Source Repos work super well together to give you elements of a CICD pipeline built in.</p>
+<p>First read up on <a href="https://cloud.google.com/cloud-build/docs/running-builds/create-manage-triggers" target="_blank">Creating and managing build triggers</a> and <a href="https://cloud.google.com/cloud-build/docs/deploying-builds/deploy-gke#automating_deployments" target="_blank">Automating GKE Deployments</a>.</p>
+<p>Next follow the instructions there, or simply go to the <strong>Workloads</strong> tab in GKE, click one of your deployments, and use the notifcation at the top to set up an automated deployment.</p>
+<p>Once you have it set up, try making a change and pushing the repo to see if the change automatically rolls out for you. Remember, you can keep an eye on the deployment with kubectl describe deployments DEPLOYMENT_NAME to see when all pods are up to date and available.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cleanup" duration="1">
+        <p>Remember to delete your cluster. Just keep some notes on the settings you used to provision it (enabling Datastore). Because you have the YAML files, you can easily create a new cluster later and then just reapply those files. That&#39;s the beauty of Infrastructure as Code!</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

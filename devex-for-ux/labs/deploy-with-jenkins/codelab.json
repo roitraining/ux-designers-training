@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-05-14T11:14:19-07:00",
+  "id": "deploy-with-jenkins",
+  "duration": 100,
+  "title": "Deploy Code with Jenkins",
+  "authors": "Jordan Hart",
+  "summary": "Deploy Code with Jenkins",
+  "source": "02-deploy-with-jenkins.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "devex for ux designers"
+  ],
+  "tags": [
+    "google cloud"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform",
+  "url": "deploy-with-jenkins"
+}

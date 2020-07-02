@@ -1,0 +1,252 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Deploy Code with Jenkins</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="deploy-with-jenkins"
+                  title="Deploy Code with Jenkins"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
+<ul class="checklist">
+<li>How to use Git to track and transfer code</li>
+<li>How to install and configure Jenkins</li>
+<li>How to release updates through Jenkins</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create a VM" duration="3">
+        <p>Open Cloud Shell and run the following command:</p>
+<pre><code>gcloud compute instances create jenkins-example --tags=http-server --zone=us-central1-a
+</code></pre>
+<p>Notice how we are using the CLI to create a VM with a firewall tag to allow HTTP (port 80) traffic. That has the same effect as checking the box (allow HTTP access) as we did with the GUI in the previous lab. In both cases this works because we are using the default VPC network which has a default firewall rule that allows traffic on port 80 for VMs with that tag (http-server). There is a similar default rule for HTTPS traffic (port 443) for VMs with the https-server tag.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create a Sample Web App" duration="20">
+        <h2 is-upgraded>Create a Cloud Source Repo to House the Application</h2>
+<p>This time instead of creating the application directly on the server, we are instead going to create it on Cloud Shell. We are treating Cloud Shell as a &#34;local&#34; development machine, which is an appropriate use for it, though most developers would actually use their local machine and a local text editor (such as Atom) or an IDE (such as VS Code).</p>
+<p>In Cloud Shell, click <strong>Open Editor</strong>, then click the popout button to open it in a new window. This window will be our development machine. If you&#39;d prefer to actually use your laptop as the development machine, just make sure to <a href="https://cloud.google.com/sdk/install" target="_blank">install the Google Cloud CLI tools</a> and log in with:</p>
+<pre><code>$ gcloud auth login --brief
+</code></pre>
+<p>Next go to Cloud Source Repos and create a new repo. Call the repo ‘sample-app&#39; and choose a project. In the screen that comes up after creation, leave <strong>Clone your repository to a local Git repository</strong> selected, but switch the tab below it to <strong>Google Cloud SDK</strong>. You should already have steps 1 and 2 complete, now follow the rest of the steps.</p>
+<p>To commit some initial code do the following:</p>
+<ol type="1">
+<li>Create a file called README.md in the root of your sample-app directory in Cloud Shell.</li>
+<li>Add any text to it, like &#34;This is a sample app.&#34;</li>
+<li>Run this command to add all new changes in the repo: git add .</li>
+<li>Commit the changes to Git: git commit -m ‘initial commit&#39;</li>
+<li>You are now ready to git push which is Step 5 in the Source Repos instructions.</li>
+</ol>
+<p><strong>NOTE: You will be prompted to configure Git. You may provide fake information here if you prefer. Use the two git config commands they show you.</strong></p>
+<p>Once you refresh the Source Repos page, you should see your README file. It is a time-honored tradition to have a README.md file at the root of all Git repos to explain what is in the repo, how to get it running, and usually often a bit about the tools that are used.</p>
+<h2 is-upgraded>Create the Sample Application</h2>
+<p>First create a text file called ‘.gitignore&#39; and inside it write node_modules. This will tell Git to ignore your node_modules folder which includes your dependencies. We don&#39;t want to continually transfer the dependencies around with Git, those should come directly from NPM. You can read more about best practices for dependencies in the <a href="https://12factor.net/dependencies" target="_blank">corresponding twelve-factor best practice</a>.</p>
+<p>Now you are ready to create your app. Since you are in Cloud Shell, Node and NPM have already been installed for you. So you can begin by going through the <a href="https://expressjs.com/en/starter/installing.html" target="_blank">Express Installation</a>. Follow the link at the bottom to get the Hello World example we used previously running. Make sure that when you install Express with NPM you do use the –save flag. This will make sure it&#39;s included as a dependency in your package.json file.</p>
+<p>This is using port 3000 by default, which is common. To preview the app with Cloud Shell be sure to change the preview port to 3000, which is an option when you click the preview icon.</p>
+<p><strong>BONUS:</strong> Abstract the port to an environmental variable instead of hard-coding it as the sample directs. Let&#39;s say you set an environmental variable called PORT, to access that in Node.js use:</p>
+<pre><code>process.env.PORT
+</code></pre>
+<p>On line 3 of the Hello World application change it to:</p>
+<pre><code>const port = process.env.PORT
+</code></pre>
+<p>To read more on storing config in the environment read about <a href="https://12factor.net/config" target="_blank">the twelve-factor best practice</a>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Deploy the App with Git" duration="15">
+        <h2 is-upgraded>Push Your Code into the Repo</h2>
+<p>Add commit and push your changes:</p>
+<pre><code>git add .
+git commit -m &#39;created basic express sample&#39;
+git push origin master
+</code></pre>
+<p>In the real world, you wouldn&#39;t make changes directly to master, you would mostly likely use a feature branch, and potentially merge it into dev and even test before it got merged into master.</p>
+<h2 is-upgraded>Prepare the VM</h2>
+<p>SSH into your new VM, jenkins-example. Because we aren&#39;t in Cloud Shell, we&#39;ll need to install the tools we need.</p>
+<p>Install Git and Node:</p>
+<pre><code>sudo apt update
+sudo apt install git-all
+sudo su
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+exit
+sudo apt-get install -y nodejs
+</code></pre>
+<p>Install gcloud by following <a href="https://cloud.google.com/sdk/docs/quickstart-debian-ubuntu" target="_blank">the official documentation</a>. You should not need to init gcloud since your Compute Engine VM comes with a default service account.</p>
+<h2 is-upgraded>Clone the Repo in the VM</h2>
+<p>Go back to Source Repos, click the <strong>Clone</strong> button, choose <strong>gcloud</strong>, and follow the steps. You will get an error that you have insufficient scopes. To fix that:</p>
+<ol type="1">
+<li>Stop the VM.</li>
+<li>Edit the VM by clicking its name, then clicking the <strong>Edit</strong> button.</li>
+<li>Go down to <strong>Access scopes</strong> and change it to <strong>Set access for each API</strong>.</li>
+<li>Find the scope for <strong>Cloud Source Repositories</strong> and change it to <strong>Read Only</strong>.</li>
+<li>Save the VM and start it back up, then SSH back in and try the git clone command again.</li>
+</ol>
+<p>Move into the sample-app folder that was created when you cloned the repo.</p>
+<p>Run the following command to see the contents of package.json:</p>
+<pre><code>cat package.json
+</code></pre>
+<p>Notice that we have a dependency, Express, but if you run the ls command you&#39;ll see that we don&#39;t even have a node_modules folder, and that&#39;s where the dependencies are stored. Remember that we listed this folder in .gitignore so that it would not transfer through Git.</p>
+<p>To install the dependencies from package.json run:</p>
+<pre><code>npm install
+</code></pre>
+<h2 is-upgraded>Run the App</h2>
+<p>Change your port to port 80, and run with:</p>
+<pre><code>sudo node app
+</code></pre>
+<p>If you called your file something else, like index.js, then use that name instead. The .js part is optional.</p>
+<p>If you get an error that the port is in use, stop Apache which may be running on that port:</p>
+<pre><code>sudo /etc/init.d/apache2 stop
+</code></pre>
+<p>Go back to Compute Engine, click the external IP address of the VM, and you should see your app running.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run the App with a Process Management Tool" duration="10">
+        <h2 is-upgraded>Install PM2</h2>
+<p>So far you have been running the process manually, it would not keep running without you maintaining the shell session, and it would not automatically restart if the app crashed. Let&#39;s install a process management tool to handle the Node process for us.</p>
+<p>Hit Ctrl-C to end the process, then run the following to install a Process Management tool called PM2:</p>
+<pre><code>sudo npm install pm2 -g
+</code></pre>
+<p>Notice that unlike when we installed Express which was a dependency of the app, here we are using the -g flag instead of –save. The latter saves a reference to &#34;express&#34; in package.json so that anyone else who runs it gets the dependency, however, -g just installs it to this specific system globally. PM2 is not a dependency for the app to run, rather it&#39;s a tool we are using specifically on this server to manage the process.</p>
+<h2 is-upgraded>Run the App with PM2</h2>
+<p>Now let&#39;s start the app with PM2:</p>
+<pre><code>sudo pm2 start app.js
+</code></pre>
+<p>If you named your file something other than app.js, just use that instead. And remember that we are using sudo because we are running the app directly on port 80. That is not how it&#39;s done in the real world, but avoids a lot of complex configuration.</p>
+<p><strong>BONUS:</strong> If you want to try running it properly, follow this commonly used <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-debian-9" target="_blank">guide</a> from Digital Ocean. It will cover a more robust use of PM2, as well as using Nginx as a reverse proxy. Notice that in their prereq&#39;s they cover how to install Nginx, you&#39;ll have to do that too.</p>
+<p>This process is complex enough, but gets even more complex when you are using an SSL Cert so you can run on HTTPS (which is almost always required). On top of that, you may need to run multiple tiers, and multiple enviornments (prod, dev, test, stage). Hopefully this manual process illustrates how valuable managed services and automation tools are.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Release a Change with Git" duration="10">
+        <h2 is-upgraded>Make a Change</h2>
+<p>Go back to Cloud Shell and make a change to your main app file, app.js or whatever you chose to call it (from here on out I&#39;ll stop calling this out specifically). Perhaps just change &#34;Hello World&#34; to some other message. If you want to get fancy, you could even add some HTML and CSS.</p>
+<p>Add, commit, and push the changes:</p>
+<pre><code>git add app.js
+git commit -m &#39;updated homepage text&#39;
+git push origin masster
+</code></pre>
+<h2 is-upgraded>Deploy the Changed Version</h2>
+<p>Now switch back to the SSH window, and pull the changes:</p>
+<pre><code>git pull origin master
+</code></pre>
+<p>Go refresh the browser where you are viewing the web app, and notice that it has not changed. When you change server-side code, you need to start the process. Go back to your SSH window and run:</p>
+<pre><code>pm2 restart app
+</code></pre>
+<p>Now refresh your browser with the web app loaded, and you should see that the change has taken place.</p>
+<p>These steps illustrate the manual process that we will now automate with Jenkins. Remember that in the real world, changes would not be made directly to master. They would be made on a different branch and then merged into master.</p>
+<p><strong>BONUS:</strong> Release a change through a different branch.</p>
+<ol type="1">
+<li>Create a new branch and check it out: git checkout -b some-feature-branch</li>
+<li>Make a change, commit it, and push the new branch.</li>
+<li>Checkout master.</li>
+<li>Merge the changes: git merge some-feature-branch</li>
+<li>Push master.</li>
+</ol>
+<p>This is closer to real world, however in the real world it is typical to submit pull requests and have someone else review your code before merge.</p>
+<p><strong>Pain Point!</strong> This does not seem possible with Cloud Source Repositories. See <a href="https://twitter.com/cohix/status/1065357109146124288" target="_blank">this Twitter thread</a> and <a href="https://stackoverflow.com/questions/37200647/how-to-do-code-review-for-google-cloud-git-repo" target="_blank">this Stack Overflow discussion</a>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Set Up Jenkins" duration="20">
+        <h2 is-upgraded>Install Jenkins</h2>
+<p>First install wget to download Jenkins, then Java to run it:</p>
+<pre><code>sudo apt update
+sudo apt install wget
+sudo apt install default-jre
+</code></pre>
+<p>Next we&#39;re going to open port 8080 so we can view Jenkins from our browser:</p>
+<ol type="1">
+<li>Go to <strong>VPC network -&gt; Firewall rules</strong> and create a new rule.</li>
+<li>Call the rule ‘allow-8080&#39; and also use that as the tag to target. Set Source IP range to 0.0.0.0/0 (which is all IPv4 addresses) and under specified ports and protocols, check <strong>TCP</strong> and enter 8080 as the port.</li>
+<li>Apply this rule to the VM by clicking it in the GUI, editing it, and then down under networking, adding the tag allow-8080.</li>
+<li>Save your changes, no need to restart the VM.</li>
+</ol>
+<p>Now you are ready to follow the <a href="https://www.jenkins.io/doc/pipeline/tour/getting-started/" target="_blank">Jenkins getting started guide</a>. Here are some tips for navigating the process:</p>
+<ol type="1">
+<li>Use wget to download: wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war</li>
+<li>Once Jenkins is running, leave that terminal window with it running and open a new terminal window to work from. Just click <strong>SSH</strong> in the GCE GUI again.</li>
+<li>When the installation process asks you for the password, use the cat command to print it out in the new SSH window.</li>
+<li>Choose <strong>Install Suggested Plugins</strong>.</li>
+</ol>
+<h2 is-upgraded>Install and Configure the Google Cloud Source Plugin</h2>
+<p>From the Jenkins dashboard, click <strong>Manage Jenkins</strong>, then from that list click <strong>Manage Plugins</strong>. Click the <strong>Available</strong> tab and search for <strong>Google Authenticated Source</strong>.</p>
+<p>Check the box next to the <strong>Google Authenticated Source</strong> plugin, then click <strong>Install without restart</strong>. On the next page, check the box to <strong>Restart Jenkins when installation is complete and no jobs are running</strong>.</p>
+<p>Next go the Google Cloud Console, go to <strong>IAM &gt; Service Accounts</strong>, and find your <strong>Compute Engine Default Service Account</strong>. Click it, edit it, and create new key. Download the JSON key file. We&#39;ll use this to authenticate in a moment.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Deploy with Jenkins" duration="20">
+        <h2 is-upgraded>Set Up a Jenkins Project</h2>
+<p>Back in the Jenkins Dashboard, click <strong>New Item</strong>. Give it a name and choose <strong>Freestyle Project</strong> and click <strong>Okay</strong>. Under Source Code Management, select <strong>Git</strong>.</p>
+<p>In <strong>Credentials</strong>, click <strong>Add</strong>, then <strong>Jenkins</strong>, then switch the <strong>Kind</strong> dropdown to <strong>Google Service Account from private key</strong>. Enter your project name, and upload the JSON key file you generated earlier. Select your new credential from the <strong>Credentials</strong> dropdown.</p>
+<p>Go to <strong>Cloud Source Repositories</strong>, go into your sample-app repository, and click <strong>Clone</strong>. Switch to <strong>Manually generated credentials</strong> and copy the URL that comes after git clone. Back in Jenkins, paste this into the <strong>Repository URL</strong>.</p>
+<p>Under <strong>Build Triggers</strong>, click <strong>Poll SCM</strong> and enter five asterisks with spaces in between: <strong>* * * * *</strong></p>
+<p>This is using modified <a href="https://devhints.io/cron" target="_blank">cron syntax</a> and using all asterisks like this means that it should check every minute of every day. This is more frequent then normal, but will make our testing faster.</p>
+<p>Under <strong>Build</strong>, add a build step. Choose <strong>Execute shell</strong> since we&#39;ll just be doing a simple set of bash commands. Enter the following bash commands:</p>
+<pre><code>cd /home/jordanmhart/sample-app
+git checkout master
+git pull origin master
+npm install
+sudo pm2 restart index
+</code></pre>
+<p>Click <strong>Save</strong>.</p>
+<p><strong>Important Notes</strong></p>
+<ol type="1">
+<li>Notice you are just telling Jenkins to run the same set of commands you would normally do manually to deploy a new version.</li>
+<li>We are using npm install in case any new dependencies were added.</li>
+<li>This is a simplified workflow. At the least, you would usually have this as a separate bash script that itself was checked into source control. Also, you&#39;d normally run Jenkins on a separate machine, and in most cases, you&#39;d be building and deploying a container. You&#39;d also have multiple steps where you build, test, and then release. In addition, you&#39;d likely at least have a staging environment, if not also one or more dev environments and a test environment.</li>
+</ol>
+<h2 is-upgraded>Test the Project by Releasing a Change</h2>
+<p>Back in Cloud Shell, which we are using as a &#34;local&#34; development machine, make another change that you&#39;ll be able to confirm visually (change the text or html that is sent), but don&#39;t push it yet.</p>
+<p>Go look at the app in a browser window, refresh the page to see that it hasn&#39;t changed. Back in Cloud Shell, add and commit your change if you haven&#39;t already, and then push it to master. Go to the Jenkins Dashboard home and refresh until you see that that project has been triggered and is completed running. If you miss it, you may just notice that the last success is very recent, a minute or two ago. Less than two minutes after you push the change, it should have successfully completed running.</p>
+<p>Go back to the browser window showing your app and refresh the page, you should see the change has gone live! Congratulations, you just released a new version with Jenkins! Note that there is no particular CI aspect to this pipeline, as you are not automatically integrating feature branches into master. But you do have the CD aspect where changes that are pushed to master are automatically rolled out to production.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cleanup" duration="1">
+        <p>Don&#39;t forget to delete your VM when you are done with the lab. If you want to be able to reference it later, you can stop it instead of deleting it. You will still be charged for storing the disk, but it is a minimal charge compared to leaving a VM running.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+  swagger: '2.0'
+  info:
+    title: Slick Tickets Events API
+    description: Sample API on Cloud Endpoints with a Cloud Run backend
+    version: 1.0.0
+  host: espv2-cayyxyakwq-uw.a.run.app
+  schemes:
+    - https
+  produces:
+    - application/json
+  x-google-backend:
+    address: https://events-service-cayyxyakwq-uc.a.run.app
+    protocol: h2
+  paths:
+    /events:
+      get:
+        summary: Get the list of events
+        operationId: get-events
+        responses:
+          '200':
+            description: A successful response
+            schema:
+              type: string

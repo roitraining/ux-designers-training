@@ -1,0 +1,102 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Build a Microservice from Scratch</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="microservice-from-scratch"
+                  title="Build a Microservice from Scratch"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform">
+    
+      <google-codelab-step label="Overview" duration="5">
+        <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
+<ul class="checklist">
+<li>Create a new microservice for Slick Tickets</li>
+<li>Use modern dev tools, such as Cloud Code</li>
+<li>Bonus: Add likes and/or comments to Slick Tickets</li>
+</ul>
+<p>This is an extremely open-ended lab designed to be the culimation of the class and does not need to finish when the class is done. I would love to see Slick Tickets continue to grow and evolve over time as Google Cloud UX Designers take these courses and try out the skills they&#39;ve learned. This is the beginning of an ongoing hackathon on the Slick Tickets project. Perhaps eventually, it can be a public living example of hypermodern best practices in utilizing Google Cloud managed services.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Develop Slick Tickets!" duration="150">
+        <h2 is-upgraded>Option 1: Finish Earlier Labs</h2>
+<p>Elements of the labs in this course were very advanced, contained advanced extensions, and several of the tasks were open ended. Feel free to take this time to go back and complete anything you felt you didn&#39;t get to fully explore. If you have time, you can move on to additional tasks below.</p>
+<h2 is-upgraded>Option 2: Integrate More Google Cloud Services</h2>
+<p>If there&#39;s a service you are interested in playing with, this is a good opportunity to try integrating it into Slick Tickets. The goal in structuring the labs the way they are is that you start to get comfortable going through official and unofficial documentation and tutorials. Use this as an opportunity to try that out with the support of your instructor and classmates.</p>
+<h2 is-upgraded>Option 3: Add Features Within Existing Slick Tickets Services</h2>
+<p>Consider improving Slick Tickets itself. You could take on something relatively simple like making the tickets look pretty, or something complex like adding a commenting feature. To add something like the commenting feature, you&#39;ll need to consider routes and each component of MVC web application development. Example, comments:</p>
+<ol type="1">
+<li>Routes - Add new routes to create, edit, and delete comments (you probably won&#39;t need a dedicated view route since they will likely show up under the event itself).</li>
+<li>Models - This is mostly handled by Firestore, but you will need application code to CRUD events via Firestore, and relate them to the Events and Users collections. This could be a sub-collection to Events. It probably should not be just a property inside the existing Events collection because of <a href="https://firebase.google.com/docs/firestore/data-model" target="_blank">how Firestore is optimized</a>.</li>
+<li>Views - You will need to at least modify existing event views to handle comments; there may be need for some dedicated views to review all of your own comments.</li>
+<li>Controllers - Each route will need to point to a controller method which handles the logic for that route.</li>
+</ol>
+<p>Here are some ideas for new features:</p>
+<ol type="1">
+<li>Comments.</li>
+<li>Likes.</li>
+<li>Better ticket printing.</li>
+<li>Better flow for mailed tickets.</li>
+<li>Sharing features to email events to friends or post them to social media.</li>
+<li>Payment processing with PayPal, Stripe, or Braintree (will require creating logins).</li>
+<li>Enhanced Admin Dashboard.</li>
+<li>Event management features for while the event is running (i.e., checkin).</li>
+</ol>
+<h2 is-upgraded>Option 4: Build a Microservice from Scratch</h2>
+<p>The highest goal of this class is that attendees would create a microservice from scratch. That is not for everyone, and if you are new to MVC web application development, that will be quite a stretch in the time we have remaining. But if you are feeling ambitious, keep reading!</p>
+<p>For this, you will need to do all the elements of routes and MVC listed above in Option 3, and in addition:</p>
+<ol type="1">
+<li>Create a new service, starting with the <a href="https://expressjs.com/en/starter/installing.html" target="_blank">Express Getting Started Guide</a> and using the Events and Users services as examples.</li>
+<li>Write a Dockerfile for that service and use Cloud Build to create a Docker image and store it in Container Registry.</li>
+<li>Deploy the service to Cloud Run.</li>
+<li>Update your Endpoints configuration to include the new Service.</li>
+<li>Update the existing Slick Tickets web app and/or microservices to consume the new Service.</li>
+</ol>
+<p>This will involve CRUD operations through routes, models, views, and controllers both within the new service and in the consuming services. Creating a very simple service could be possible within just a few hours, but likely this will turn into a longer project you will continue after class.</p>
+<p>Here are some ideas for new microservices:</p>
+<ol type="1">
+<li>Payment processing.</li>
+<li>Shipping calculator (time and cost) for mailed tickets (will require interacting with USPS/Fedex/UPS APIs).</li>
+<li>Weather prediction (will require integrating with at least one weather API).</li>
+<li>The admin dashboard could be a separate web app service.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cleanup" duration="1">
+        <p>You can keep and delete things as you see fit, based on your plans for continued work. If you aren&#39;t going to be actively using something that involves provisioned long-term instances (GCE, GKE, Cloud SQL), then those should probably be shut down or deleted. Managed services like Cloud Run fully-managed and Cloud Functions are unlikely to incur charges.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

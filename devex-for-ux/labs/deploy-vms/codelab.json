@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-05-30T13:43:53-07:00",
+  "id": "deploy-vms",
+  "duration": 85,
+  "title": "Deploy VMs",
+  "authors": "Jordan Hart",
+  "summary": "Deploy VMs on GCE with the GUI, CLI and API then install the Google Cloud Logging and Monitoring agents",
+  "source": "01-deploy-vms.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "devex for uxers"
+  ],
+  "tags": [
+    "google cloud"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform",
+  "url": "deploy-vms"
+}

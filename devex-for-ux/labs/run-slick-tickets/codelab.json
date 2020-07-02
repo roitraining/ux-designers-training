@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-05-30T13:44:02-07:00",
+  "id": "run-slick-tickets",
+  "duration": 26,
+  "title": "Run Slick Tickets",
+  "authors": "Jordan Hart",
+  "summary": "Run Slick Tickets",
+  "source": "03-run-slick-tickets.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "devex for uxers"
+  ],
+  "tags": [
+    "google cloud"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform",
+  "url": "run-slick-tickets"
+}
