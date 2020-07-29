@@ -224,7 +224,7 @@ Next we're going to open port 8080 so we can view Jenkins from our browser:
 
 Now you are ready to follow the [Jenkins getting started guide](https://www.jenkins.io/doc/pipeline/tour/getting-started/). Here are some tips for navigating the process:
 1. Use wget to download: wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
-2. Once Jenkins is running, leave that terminal window with it running and open a new terminal window to work from. Just click **SSH** in the GCE GUI again.
+2. Once Jenkins is running, leave that terminal window with it running and open a new terminal window to work from. Just click **SSH** in the Compute Engine GUI again.
 3. When the installation process asks you for the password, use the cat command to print it out in the new SSH window.
 4. Choose **Install Suggested Plugins**.
 
