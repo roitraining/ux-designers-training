@@ -53,7 +53,7 @@ gcloud compute instances list
 gcloud Documentation:
 [https://cloud.google.com/sdk/gcloud/reference/compute/instances/create](https://cloud.google.com/sdk/gcloud/reference/compute/instances/create)
 
-GCE Documentation:
+Compute Engine Documentation:
 [https://cloud.google.com/compute/docs/instances/create-start-instance#startinstancegcloud](https://cloud.google.com/compute/docs/instances/create-start-instance#startinstancegcloud)
 
 <!-- ------------------------ -->
@@ -264,7 +264,7 @@ Run the application:
 sudo node index
 ```
 
-Go back to the GCE GUI and click the VM's external IP address; it should be linkified if you checked the box for 'Allow HTTP Access.'
+Go back to the Compute Engine GUI and click the VM's external IP address; it should be linkified if you checked the box for 'Allow HTTP Access.'
 
 In the real world, you would not copy and paste code directly into a server, but rather your code would be tracked and transferred with Git. Also, in many cases CICD tools would manage most of that process. We'll cover both in the next module and lab.
 
@@ -289,7 +289,7 @@ Search for 'compute cpu' and try both the version from the agent and from comput
 Duration: 10
 
 SSH into your VM.
-Follow the [official documentation](https://cloud.google.com/monitoring/agent/install-agent#agent-install-debian-ubuntu) for Debian (the default flavor of Linux on GCE). The notes below will help you navigate the process.
+Follow the [official documentation](https://cloud.google.com/monitoring/agent/install-agent#agent-install-debian-ubuntu) for Debian (the default flavor of Linux on Compute Engine). The notes below will help you navigate the process.
 **Notes:**
 * If you created the VM, you should have sudo access, which is root (admin) privilege
 * To start in your home directory as recommended, type:
@@ -305,7 +305,7 @@ Wait a minute and then go to Monitoring and see if you are getting CPU utilizati
 ### Logging
 Go to **Logging** in the GUI.
 Select your project, **'GCE Project, XXXXX'**.
-You might expect a log entry for 'Example app listening at...' but you won't see it. Installing the Logging agent would give you more system logs, but you still wouldn't see console.log from Node.js. While this would work in managed services, for GCE you would need to use an explicit logging client library. Generally you would use both the Logging agent and a logging library.
+You might expect a log entry for 'Example app listening at...' but you won't see it. Installing the Logging agent would give you more system logs, but you still wouldn't see console.log from Node.js. While this would work in managed services, for Compute Engine you would need to use an explicit logging client library. Generally you would use both the Logging agent and a logging library.
 
 Install the Logging agent by following [the official guide](https://cloud.google.com/logging/docs/agent/installation#agent-install-debian-ubuntu) for Debian. The steps are very similar to the steps to install the Monitoring agent, however, there is an extra configuration step. While either option will work, choose structured logging for better organization.
 
