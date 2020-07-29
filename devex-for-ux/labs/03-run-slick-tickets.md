@@ -65,7 +65,7 @@ Create a new feature branch for the change you'd like to make, make the change, 
 
 If you make some cool changes during or after these courses, let Jordan know (jordanmhart@gmail.com) and he can integrate them into the main repo. Normally this would be done with a pull request, which would be a great feature for Cloud Source Repos (see the pain point from the previous lab). :)
 
-### ANOTHER BONUS: Run Slick Tickets on GCE
+### ANOTHER BONUS: Run Slick Tickets on Compute Engine
 If you still have time, try running Slick Tickets on a VM. Combine your knowledge from the first lab where we ran a simplistic sample app, and what you learned here, and run each component on a separate VM. Run the two microservices first, so you have their IP addresses handy when you run the web tier.
 
 In this case, all three components will be running on port 80, either because you started them manually on port 80, or because you followed the nginx instructions and used nginx as a reverse proxy.
