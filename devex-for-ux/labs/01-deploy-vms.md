@@ -80,7 +80,7 @@ To get started with NPM, init your current directory as an NPM project:
 npm init
 ```
 
-Press Return through all of the prompts accepting the defaults. In a real project, you would fill out at least some of the fields and probably be inside of a folder managed by Git.
+Press ENTER through all of the prompts accepting the defaults. In a real project, you would fill out at least some of the fields and probably be inside of a folder managed by Git.
 
 Next, use NPM to install the Google Cloud client libraries for Node:
 ``` bash
@@ -110,7 +110,7 @@ Read as much of it as you want, then copy the contents of "[t]he complete exampl
 
 Paste that into Cloud Shell where you still have Nano open and are editing list-vms.js.
 
-Use CTRL-O to save (write out), and press Return when the existing filename is shown to you. Next use CTRL-X to exit Nano.
+Use CTRL-O to save (write out), and press ENTER when the existing filename is shown to you. Next use CTRL-X to exit Nano.
 
 ### Try Running Your Script
 Finally, run your script with Node.js using the following bash command:
@@ -126,7 +126,7 @@ To make it run, you have to edit list-vms.js with Nano, and add this line to the
 listVMs()
 ```
 
-After saving (CTRL-O, then Return) and exiting Nano (CTRL-X), use the previous bash command to again run the script with Node.js. This time, you should see an output, but it is not super helpful because the real information is hidden deep within objects and arrays whose contents are not even shown.
+After saving (CTRL-O, then ENTER) and exiting Nano (CTRL-X), use the previous bash command to again run the script with Node.js. This time, you should see an output, but it is not super helpful because the real information is hidden deep within objects and arrays whose contents are not even shown.
 
 To make it more useful, edit the script again. This time change the console log near the bottom of the script; currently it says:
 ``` javascript
@@ -185,7 +185,7 @@ zone.createVM('api-example', config).then(function(data) {
 });
 ```
 
-Save and exit Nano (CTRL-O, Return, CTRL-X), then run your new script:
+Save and exit Nano (CTRL-O, ENTER, CTRL-X), then run your new script:
 ``` bash
 node create-vm.js
 ```
@@ -234,7 +234,7 @@ Initialize NPM (Node Package Manager):
 npm init
 ```
 
-Take the default option for index.js by simply pressing Return.
+Take the default option for index.js by simply pressing ENTER.
 
 Install Express (an MVC framework and webserver):
 ``` bash
@@ -257,7 +257,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-Type CTRL-O and press Return to save, and then type CTRL-X to exit the Nano text editor.
+Type CTRL-O and press ENTER to save, and then type CTRL-X to exit the Nano text editor.
 
 Run the application:
 ``` bash
