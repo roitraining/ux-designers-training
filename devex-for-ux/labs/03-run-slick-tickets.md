@@ -54,19 +54,17 @@ Also since we are running on a single VM (Cloud Shell), the three components can
 ### Start the Services
 With this in mind, adjust your .env files as needed, and run all three components. You should then be able to preview the web tier and use the application.
 
-Follow the instructions in the README to create an account and make yourself an administrator. Then as an administrator, you can create events. Create a second account to use to test the end user experience, and try registering for an event and printing a ticket.
+Follow the instructions in the README to create an account and make yourself an administrator. Then as an administrator, you can create events. Create a second account to test the end user experience, and try registering for an event and printing a ticket.
 
-### BONUS: Add Your Own Repository and Make a Change
+### Bonus: Add Your Own Repository and Make a Change
 Create a new repository for your version of the app. Add the remotes from the root directory of the repo where you've cloned it in Cloud Shell. To add the remotes, follow [the official Git documentation](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes).
 
-Make sure to name your new remote something clear that you'll remember. In the past when we've used commands like "git push origin master", the word "origin" was the name of the remote we were pushing or pulling. Now with multiple remotes, you'll be able to push and pull from either. That way you can pull updates from the main repo (origin) and push and pull to your own as well.
+Make sure to name your new remote something that you'll remember. In the past when we've used commands like "git push origin master", the word "origin" was the name of the remote we were pushing or pulling. Now with multiple remotes, you'll be able to push and pull from either. That way you can pull updates from the main repo (origin) and push and pull to your own as well.
 
 Create a new feature branch for the change you'd like to make, make the change, and then merge the change into master. Restart any of the three components you made a change to, and preview to see that the change worked. Make sure to push both the feature branch and master up to your remote.
 
-If you make some cool changes during or after these courses, let Jordan know (jordanmhart@gmail.com) and he can integrate them into the main repo. Normally this would be done with a pull request, which would be a great feature for Cloud Source Repos (see the pain point from the previous lab). :)
-
-### ANOTHER BONUS: Run Slick Tickets on Compute Engine
-If you still have time, try running Slick Tickets on a VM. Combine your knowledge from the first lab where we ran a simplistic sample app, and what you learned here, and run each component on a separate VM. Run the two microservices first, so you have their IP addresses handy when you run the web tier.
+### Bonus: Run Slick Tickets on Compute Engine
+If you still have time, try running Slick Tickets on a VM. Combine your knowledge from the first lab where we ran a simplistic sample app and what you learned here, and run each component on a separate VM. Run the two microservices first, so you have their IP addresses handy when you run the web tier.
 
 In this case, all three components will be running on port 80, either because you started them manually on port 80, or because you followed the nginx instructions and used nginx as a reverse proxy.
 
