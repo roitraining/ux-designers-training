@@ -80,9 +80,9 @@ To get started with NPM, init your current directory as an NPM project:
 npm init
 ```
 
-Just hit Return through all the prompts taking the defaults. In a real project, you would fill at least some of the fields out and probably be inside of a folder managed by Git.
+Press Return through all of the prompts accepting the defaults. In a real project, you would fill out at least some of the fields and probably be inside of a folder managed by Git.
 
-Next use NPM to install the Google Cloud client libraries for Node:
+Next, use NPM to install the Google Cloud client libraries for Node:
 ``` bash
 npm install --save @google-cloud/compute
 npm install --save googleapis
@@ -93,7 +93,7 @@ npm install --save googleapis
 Duration: 20
 
 ### Create a List VMs Script
-Next create a JavaScript file to use for our list VMs script:
+Next, create a JavaScript file to use for our list VMs script:
 ``` bash
 touch list-vms.js
 ```
@@ -103,14 +103,14 @@ Then use Nano to edit it:
 nano list-vms.js
 ```
 
-While leaving that open and ready to paste into, in a different browser tab review this page:
+While leaving that open and ready to paste into, in a different browser tab, review this page:
 [https://cloud.google.com/compute/docs/tutorials/nodejs-guide](https://cloud.google.com/compute/docs/tutorials/nodejs-guide).
 
 Read as much of it as you want, then copy the contents of "[t]he complete example" at the bottom.
 
 Paste that into Cloud Shell where you still have Nano open and are editing list-vms.js.
 
-Use Ctrl-O to save (write out), and hit Return when the existing filename is shown to you. Next use Ctrl-X to exit Nano.
+Use CTRL-O to save (write out), and press Return when the existing filename is shown to you. Next use CTRL-X to exit Nano.
 
 ### Try Running Your Script
 Finally, run your script with Node.js using the following bash command:
@@ -126,7 +126,7 @@ To make it run, you have to edit list-vms.js with Nano, and add this line to the
 listVMs()
 ```
 
-After saving (Ctrl-O, then Return) and exiting Nano (Ctrl-X), use the previous bash command to again run the script with Node.js. This time, you should see an output, but it is not super helpful because the real information is hidden deep within objects and arrays whose contents are not even shown.
+After saving (CTRL-O, then Return) and exiting Nano (CTRL-X), use the previous bash command to again run the script with Node.js. This time, you should see an output, but it is not super helpful because the real information is hidden deep within objects and arrays whose contents are not even shown.
 
 To make it more useful, edit the script again. This time change the console log near the bottom of the script; currently it says:
 ``` javascript
@@ -185,7 +185,7 @@ zone.createVM('api-example', config).then(function(data) {
 });
 ```
 
-Save and exit Nano (Ctrl-O, Return, Ctrl-X), then run your new script:
+Save and exit Nano (CTRL-O, Return, CTRL-X), then run your new script:
 ``` bash
 node create-vm.js
 ```
@@ -210,7 +210,7 @@ Most developers would be able to quickly parse the code and figure out how to pr
 ### Delete the CLI and API Example VMs
 Use the GUI to delete the cli-example and api-example VMs.
 
-**BONUS:** Use the CLI to delete the cli-example, and a script to delete the api-example.
+**Bonus:** Use the CLI to delete the cli-example, and a script to delete the api-example.
 
 <!-- ------------------------ -->
 ## Deploy a Simple Web Application
@@ -234,7 +234,7 @@ Initialize NPM (Node Package Manager):
 npm init
 ```
 
-Take the default option for index.js by simply hitting Return.
+Take the default option for index.js by simply pressing Return.
 
 Install Express (an MVC framework and webserver):
 ``` bash
@@ -257,7 +257,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-Type Ctrl-O and hit Return to save, and then type Ctrl-X to exit the Nano text editor.
+Type CTRL-O and press Return to save, and then type CTRL-X to exit the Nano text editor.
 
 Run the application:
 ``` bash
@@ -266,7 +266,7 @@ sudo node index
 
 Go back to the Compute Engine GUI and click the VM's external IP address; it should be linkified if you checked the box for 'Allow HTTP Access.'
 
-In the real world, you would not copy and paste code directly into a server, but rather your code would be tracked and transferred with Git. Also, in many cases CICD tools would manage most of that process. We'll cover both in the next module and lab.
+In the real world, you would not copy and paste code directly into a server, but rather your code would be tracked and transferred with Git. Also, in many cases, CICD tools would manage most of that process. We'll cover both in the next module and lab.
 
 **Important Note:** Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
@@ -297,19 +297,19 @@ Follow the [official documentation](https://cloud.google.com/monitoring/agent/in
 cd ~
 ```
 * On Step 4, run the commands one by one.
-* Review the instructions on pinning a major version for production environments, but for our purposes the final command for installing the latest version will suffice (sudo apt-get install stackdriver-agent)
-* You do not need to move on to optional tasks
+* Review the instructions on pinning a major version for production environments, but for our purposes the final command for installing the latest version will suffice (sudo apt-get install stackdriver-agent).
+* You do not need to move on to optional tasks.
 
 Wait a minute and then go to Monitoring and see if you are getting CPU utilization from the agent now.
 
 ### Logging
 Go to **Logging** in the GUI.
 Select your project, **'GCE Project, XXXXX'**.
-You might expect a log entry for 'Example app listening at...' but you won't see it. Installing the Logging agent would give you more system logs, but you still wouldn't see console.log from Node.js. While this would work in managed services, for Compute Engine you would need to use an explicit logging client library. Generally you would use both the Logging agent and a logging library.
+You might expect a log entry for 'Example app listening at...' but you won't see it. Installing the Logging agent would give you more system logs, but you still wouldn't see console.log from Node.js. While this would work in managed services, for Compute Engine you would need to use an explicit logging client library. Generally, you would use both the Logging agent and a logging library.
 
 Install the Logging agent by following [the official guide](https://cloud.google.com/logging/docs/agent/installation#agent-install-debian-ubuntu) for Debian. The steps are very similar to the steps to install the Monitoring agent, however, there is an extra configuration step. While either option will work, choose structured logging for better organization.
 
-Next install a logging library and connect it to Cloud Logging. Follow the [official guide](https://cloud.google.com/logging/docs/setup/nodejs) for Node.js. After you have the NPM package installed and you have put the configuration code near the top of index.js, you can change your app.listen callback to use the new logger:
+Next, install a logging library and connect it to Cloud Logging. Follow the [official guide](https://cloud.google.com/logging/docs/setup/nodejs) for Node.js. After you have the NPM package installed and you have put the configuration code near the top of index.js, you can change your app.listen callback to use the new logger:
 ``` javascript
 app.listen(port, () => logger.info(`Example app listening at http://localhost:${port}`))
 ```
