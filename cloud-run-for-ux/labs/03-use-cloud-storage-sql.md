@@ -26,8 +26,8 @@ Open Cloud Shell and run the following command:
 gcloud compute instances create storage-sql-example --zone=us-central1-a --scopes=sql-admin,storage-rw
 ```
 
-**Important Note**
-By default, VMs on GCE come with a Default Service Account that has Project Editor access. That is way overkill for a typical application, but fortunately also by default, the VM's ability to act against Google Cloud's APIs is further limited by scopes (this is only true when using the Compute Engine Default Service Account). Those scopes, by default, are set to allow writing to Cloud Operations, reading from Cloud Storage, and not much else. Here, we are specifying read/write access to Cloud Storage and access to Cloud SQL. 
+**Important Note:**
+By default, VMs on Compute Engine come with a Default Service Account that has Project Editor access. That is way overkill for a typical application, but fortunately also by default, the VM's ability to act against Google Cloud's APIs is further limited by scopes (this is only true when using the Compute Engine Default Service Account). Those scopes, by default, are set to allow writing to Cloud Operations, reading from Cloud Storage, and not much else. Here, we are specifying read/write access to Cloud Storage and access to Cloud SQL. 
 
 It would be possible to connect to Cloud SQL without this scope, since you can whitelist your VMs IP address and then connect by normal SQL mechanisms. However, here we are going to use the Cloud SQL Proxy and authenticate through Google. You can read more about [permissions and the SQL Proxy](https://cloud.google.com/sql/docs/postgres/connect-compute-engine#gce-connect-proxy) in the documentation. 
 
@@ -55,7 +55,7 @@ Initialize NPM (Node Package Manager):
 npm init
 ```
 
-Take the default option for index.js by simply hitting Return.
+Take the default option for index.js by simply pressing ENTER.
 
 Install Express (an MVC framework and webserver):
 ``` bash
@@ -78,14 +78,14 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-Type Ctrl-O, hit Return to save, and then type Ctrl-X to exit the Nano text editor.
+Type CTRL-O, press ENTER to save, and then type CTRL-X to exit the Nano text editor.
 
 Run the application:
 ``` bash
 sudo node index
 ```
 
-Go back to the GCE GUI and click the VM's external IP address; it should be linkified if you checked the box for 'Allow HTTP Access.'
+Go back to the Computer Engine GUI and click the VM's external IP address; it should be linkified if you checked the box for 'Allow HTTP Access.'
 
 **Important Note:** Normally, you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
@@ -94,7 +94,7 @@ Go back to the GCE GUI and click the VM's external IP address; it should be link
 Duration: 30
 
 ### Create a Cloud Storage Bucket for Your Application
-Choose a bucket name; it has to be globally unique in all of Google Cloud Storage.
+Choose a bucket name; it has to be globally unique in all of Cloud Storage.
 
 Substitue in that name in the following command to create your bucket:
 ``` bash
@@ -102,7 +102,7 @@ gsutil mb gs://[BUCKET_NAME]/
 ```
 
 ### Install the Cloud Storage Client Library for Node.js
-Go back to your SSH window and exit the app with Ctrl-C.
+Go back to your SSH window and exit the app with CTRL-C.
 
 While still in the root directory of your application, install the Node.js client library for Cloud Storage:
 ```
@@ -161,7 +161,7 @@ Run your app, try the endpoint, then exit the app and see if your file is there 
 Use the documentation to modify your controller method so that after it creates the file, it uploads it to Cloud Storage:
 [https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-nodejs](https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-nodejs).
 
-**Tips**
+**Tips**<br>
 1. It's easier to edit the code if you use cat index.js to view the contents, copy and paste them into a text editor like Atom or VS Code. When you are done, you can copy the contents, delete index.js, and recreate it with your new contents.
 2. To make sure you are uploading the file after it has been written to local disk, be sure to do the upload inside the callback of fs.writeFile.
 3. Pay attention to the fact that we have already defined a bucket with a bucket name up in our configuration. So instead of storage.bucket(bucketName), we can just use bucket. Be sure to remove any reference to bucketName as we won't have that defined. 
@@ -192,7 +192,7 @@ Follow the example for downloading files from Cloud Storage:
 
 Integrate this with your new controller method. 
 
-**Tips**
+**Tips**<br>
 1. Create a downloads folder inside your my-app folder and prepend that to your destFilename ('./downloads/[FILENAME]').
 2. Like last time, we can just use bucket.upload since we've defined bucket in the config.
 
@@ -202,7 +202,7 @@ Follow the example from Node.js:
 
 Integrate this with your new controller method.
 
-**Tips**
+**Tips**<br>
 1. You can use a relative filepath: ./downloads/[FILENAME], and you probably already have this available as destFilename.
 2. Do this after the await line, since that will fire only after the file has been downloaded. 
 3. Move your res.send to after the file has been read, and respond with the file contents (called data in the example code) instead of the filename.
@@ -233,7 +233,7 @@ sudo apt install wget
 Follow the official how-to guide:
 [https://cloud.google.com/sql/docs/postgres/authorize-proxy](https://cloud.google.com/sql/docs/postgres/authorize-proxy).
 
-**Tips**
+**Tips**<br>
 1. Your VM already has a Service Account with the Project Editor role, and when you created it you added a scope to allow Cloud SQL access, so you don't have to worry about the IAM portion. So after the installation section, you can move down the execution section.
 2. When you start (execute) the proxy, use TCP and the port 5432 (standard for Postgres, though not required).
 3. You can find the INSTANCE_CONNECTION_NAME in the overview of the instance in the Google Cloud Console under **Connect to this instance**.
@@ -273,7 +273,7 @@ Leave that window open, and open yet another SSH window to edit your application
 ### Writing to Cloud SQL from Our Application
 The beauty of Cloud SQL, aside from being an easy to use managed service, is that it runs standard versions of SQL (Postgres, MySQL, and SQL Server) and offers the SQL Proxy for easy connection. That means that all we have to do now is install a standard Postgres client library and connect on localhost (127.0.0.1)! This name and IP are both ways for a computer to simply refer to itself in networking. The Cloud SQL Proxy pretends that it is a local database, but instead proxies the connections over to the remote instance. 
 
-First let's set up another route and controller method to test writing to Cloud SQL. Call this route '/write-sql' and have it expect a query parameter called message:
+First, let's set up another route and controller method to test writing to Cloud SQL. Call this route '/write-sql' and have it expect a query parameter called message:
 ``` javascript
 app.get('/add-message', function (req, res) {
   const message = req.query.message
@@ -286,9 +286,9 @@ Let's start by installing a Postgres client for Node.js. In your new SSH window,
 npm install pg --save
 ```
 
-Next follow the [documentation](https://node-postgres.com/) to get it set up in index.js. Unless you are comfortable with async and await, I recommend you use the callback version. We'll replace the specific query in a moment. 
+Next, follow the [documentation](https://node-postgres.com/) to get it set up in index.js. Unless you are comfortable with async and await, I recommend you use the callback version. We'll replace the specific query in a moment. 
 
-**Important Note**
+**Important Note:**
 You are about to be instructed to put a password into application code in plain text. In the real world, you should never do that, and especially never checkin such code to Git. Also, be sure not to use any real passwords here, simple passwords like 'test' are fine for this lab. Go back to the console and change the password for your user if necessary.
 
 Be sure to pass a configuration object when creating the client like this:
