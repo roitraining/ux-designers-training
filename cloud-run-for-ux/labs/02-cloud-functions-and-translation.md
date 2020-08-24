@@ -38,11 +38,11 @@ The first example at the bottom of that page shows the specific command you need
 Download and install Docker:
 [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).
 
-**Optional**
+**Optional**<br>
 Download and install Postman for more robust testing of API endpoints:
 [https://www.postman.com/downloads/](https://www.postman.com/downloads/).
 
-### Cloud the Repo
+### Clone the Repo
 1. Navigate to Cloud Source Repos.
 2. Find the Slick Tickets repo (or your copy of it if you made one).
 3. Click **Clone** in the top right.
@@ -58,9 +58,9 @@ If you haven't already, create your own version of the Slick Tickets repo so you
 3. You do not need to run git config.
 4. You may name the remote something other than google, perhaps use your own name.
 
-With Git, you can have one repo and may remotes. You will have the original remote that has the version of Slick Tickets that you were given to start. And now you will have a new remote that is all yours. You will name that remote when pushing and pulling, as shown in the example you are following. 
+With Git, you can have one repo and many remotes. You have the original remote that has the version of Slick Tickets that you were given to start. And now you have a new remote that is all yours. Name that remote when pushing and pulling, as shown in the example you are following. 
 
-If all was successful, you should see the Slick Tickets code in your new repo. You may also follow these steps to connect your remote to your Cloud Shell environment so you can capture any changes you've made there. Just add, commit, and push your remote after you've added it to Cloud Shell. From your local machine in VS Code, you can do a git pull [MY_REMOTE_NAME] to get those changes locally. 
+If all was successful, you should see the Slick Tickets code in your new repo. You may also follow these steps to connect your remote to your Cloud Shell environment so you can capture any changes you've made there. Just add, commit, and push your remote after you've added it to Cloud Shell. From your local machine in VS Code, you do a git pull [MY_REMOTE_NAME] to get those changes locally. 
 
 Congratulations! You now have a local development environment setup and you are ready to develop locally. 
 
@@ -78,7 +78,7 @@ Let's start with a simple test of the client library:
 1. In the events-service folder, create a file called translation-test.js.
 2. Paste in the sample code from the Google documentation on translating text from the previous section.
 3. Follow the instructions to uncomment certain lines and select your language. See the [list of supported languages](https://cloud.google.com/translate/docs/languages).
-4. Try running your sample file with Node (it will probably fail, keep reading).
+4. Run your sample file with Node (it will probably fail, keep reading).
 
 Most likely you got an authentication error. Follow these instructions and then try again:
 [https://cloud.google.com/docs/authentication/getting-started](https://cloud.google.com/docs/authentication/getting-started).
@@ -92,7 +92,7 @@ If you are new to MVC application development, this part will be a challenge. Th
 
 When you go to add a feature in an MVC application you have to consider the route, model, view, and controller. In our case, we don't have true models since we are relying on Firestore to handle the database interactions. Also, our views are only in the web app, so for the events service we need only consider route and controller. When we integrate with the web app we'll need to consider its route, view, and controller. 
 
-**Important Note**
+**Important Note:**
 Remember that query parameters are key-value pairs that come after a question mark at the end of a URL. They do not change what route you are making a request to, they simply add additional information to it. 
 
 There are multiple ways you could approach this, but here is one possible solution. Start by adding the functionality to the events service:
@@ -102,7 +102,7 @@ There are multiple ways you could approach this, but here is one possible soluti
 4. If that is defined, then before returning the event text, make the call to the Translation API to translate the event body text according to the language specified (target).
 5. You will need to modify the example function you were given to take in the event body text and target language. You do not need to console.log the translated text, rather you will respond with it. 
 
-**Important Note**
+**Important Note:**
 In Express, as in most web frameworks, you may not try to respond twice. Be sure to have an 'if' statement that checks to see if req.query.language is defined, and if its not, just respond as you have been. In the 'else', you can respond with the translated text. That way you don't try to respond both ways and cause an error. 
 
 You can test your new endpoint in a browser, or in Postman. Simply run the service locally with Node.js (node server) and make a request to the URL. Example:
@@ -110,7 +110,7 @@ You can test your new endpoint in a browser, or in Postman. Simply run the servi
 http://localhost:3000/get-events/[MY_EVENT_SLUG]?language=fr
 ```
 
-You will probably get errors when you first try to run one of the services locally. Go through the README file for Slick Tickets and configure your service account and environment variables as it instructs. If you have trouble, just ask your instructor right away rather than spend time debugging the setup. 
+You will probably get errors when you first try to run one of the services locally. Go through the README file for Slick Tickets and configure your service account and environment variables as it instructs. If you have trouble, ask your instructor right away rather than spend time debugging the setup. 
 
 ### Add the Feature to the Web App
 Adding the feature to your events service is only half the battle. Next, you need to actually consume the new feature in the web app to make it available to end users. Again there are multiple approaches, but here is only example:
@@ -128,7 +128,7 @@ Adding the feature to your events service is only half the battle. Next, you nee
 4. Fill out the information, make sure to reference the correct image name, and hit **Deploy**.
 5. While it's deploying, click the **Show Detailed Logs** button and when it says 'successful', go try it out. It may keep acting like it's in process even after it's done. 
 
-That's it! Once you had your environment setup and configured, you never had to leave VS Code to write the feature, check it in with Git, create the new image, and deploy it to Cloud Run. You might not have even noticed that you created a new container image since Cloud Code did so much of the work for you. This is the bleeding edge of modern application development.
+That's it! Once you had your environment set up and configured, you never had to leave VS Code to write the feature, check it in with Git, create the new image, and deploy it to Cloud Run. You might not have even noticed that you created a new container image since Cloud Code did so much of the work for you. This is the bleeding edge of modern application development.
 
 <!-- ------------------------ -->
 ## Add a Go Cloud Function to Slick Tickets
