@@ -67,4 +67,4 @@ Here are some ideas for new microservices:
 ## Cleanup
 Duration: 1
 
-You can keep and delete things as you see fit, based on your plans for continued work. If you aren't going to be actively using something that involves provisioned long-term instances (GCE, GKE, Cloud SQL), then those should probably be shut down or deleted. Managed services like Cloud Run fully-managed and Cloud Functions are unlikely to incur charges.
+You can keep and delete things as you see fit, based on your plans for continued work. If you aren't going to be actively using something that involves provisioned long-term instances (Compute Engine, GKE, Cloud SQL), then those should probably be shut down or deleted. Managed services like Cloud Run fully-managed and Cloud Functions are unlikely to incur charges.
