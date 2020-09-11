@@ -39,205 +39,230 @@ Download and install Docker:
 [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).
 
 **Optional**<br>
-Download and install Postman for more robust testing of API endpoints:
-[https://www.postman.com/downloads/](https://www.postman.com/downloads/).
+Add the Yet Another Rest Client (YARC) extension to your Chrome browser for easier API testing. 
 
-### Clone the Repo
-1. Navigate to Cloud Source Repos.
-2. Find the Slick Tickets repo (or your copy of it if you made one).
-3. Click **Clone** in the top right.
-4. Select **Google Cloud SDK**.
-5. Using terminal in VS Code, find a place where you want to put the repo. I recommend creating a Git folder in your home folder, then moving inside of it. 
-6. Paste the clone command given to you from Cloud Source Repos.
-7. CD Inside of it.
 
-### Make Your Own Repo
-If you haven't already, create your own version of the Slick Tickets repo so you can push changes:
-1. In Cloud Source Repos, use the button in the top right to create a new repo.
-2. After creating the repo, follow the instructions to **Push code from a local Git repository**.
-3. You do not need to run git config.
-4. You may name the remote something other than google, perhaps use your own name.
+### Clone Slick Tickets locally and into your project. 
 
-With Git, you can have one repo and many remotes. You have the original remote that has the version of Slick Tickets that you were given to start. And now you have a new remote that is all yours. Name that remote when pushing and pulling, as shown in the example you are following. 
+1. On your local machine, open a terminal window and navigate to the base folder where you'd like the local copy of Slick Tickets stored. Then clone the repo into that folder:
 
-If all was successful, you should see the Slick Tickets code in your new repo. You may also follow these steps to connect your remote to your Cloud Shell environment so you can capture any changes you've made there. Just add, commit, and push your remote after you've added it to Cloud Shell. From your local machine in VS Code, you do a git pull [MY_REMOTE_NAME] to get those changes locally. 
+```
+git clone https://github.com/haggman/slick-tickets.git
+```
 
-Congratulations! You now have a local development environment setup and you are ready to develop locally. 
+2. In the Google Cloud console use the hamburger menu to view your project's `Source Repositories`. Make sure you are in the project you've been using for this course.
+
+2. Use the button in the top right to `Add repository`. Create a new repository and name it `slick-tickets`. Place the repository in your class project. 
+
+3. After creating the repo, follow the instructions in the Cloud console to **Push code from a local Git repository**. Use the `Google Cloud SDK` version.  
+
+4. Refresh the page in Source Repositories and make sure you see your new repo. 
+
+5. On your local machine, open Visual Studio Code and using `File | Open` or `File | Open Folder` to open your local copy of slick-tickets. 
+
+
+With Git, you can have one local repo and many remotes. At this point you should have the original remote that has the version of Slick Tickets that you were given to start. Now you have a new remote named "google" that is part of your class project.  
 
 <!-- ------------------------ -->
-## Add Cloud Translation to Slick Tickets
-Duration: 45
+## Build a test translation app
+Duration: 20
 
 ### Install and Configure the Cloud Translation Client Library for Node.js
-1. In your local terminal in VS Code, navigate to the events-service folder.
-2. Find the correct npm install command from [the documentation](https://cloud.google.com/translate/docs/reference/libraries/v2/nodejs).
-3. Don't worry about the second part where they have you use the client library in code, instead follow the link to see how to **translating text**. 
+1. In Visual Studio Code (VSC), use the Terminal menu to open a terminal window.
+
+2. In the terminal window, change into the app/events-service folder. 
+
+3. Find the correct npm install command from [the documentation](https://cloud.google.com/translate/docs/reference/libraries/v2/nodejs).
+
+```
+npm install --save @google-cloud/translate
+```
+
+3. Don't worry about the second part where they have you use the client library in code, instead follow the link at the bottom of the documenation to see how to **translate text**. (https://cloud.google.com/translate/docs/basic/translating-text#translating_text)
 
 ### Test the Client Library
-Let's start with a simple test of the client library:
-1. In the events-service folder, create a file called translation-test.js.
+Let's start with a  test of the client library:
+1. In the events-service folder, create a file called `translation-test.js`.
+
 2. Paste in the sample code from the Google documentation on translating text from the previous section.
+
 3. Follow the instructions to uncomment certain lines and select your language. See the [list of supported languages](https://cloud.google.com/translate/docs/languages).
-4. Run your sample file with Node (it will probably fail, keep reading).
 
-Most likely you got an authentication error. Follow these instructions and then try again:
-[https://cloud.google.com/docs/authentication/getting-started](https://cloud.google.com/docs/authentication/getting-started).
+4. In the terminal window, install all your application dependencies:
 
-Most likely it will fail again. Check the console output and you should see information about enabling the API, including a direct link to do so. Follow that link and enable the Cloud Translate API. 
+```
+npm i
+```
 
-Try again, this time it should succeed. This is why we start with simple test code before trying to integrate something into our application. It helps isolate potential issues so we can troubleshoot general things like this first before we have to troubleshoot inside the complexity of our application code. 
+5. Run your sample file with Node (it will probably fail, keep reading).
+
+```
+node translate-text.js
+```
+
+6. Most likely you got an authentication error. Code running on a remote machine, that's reaching out to Google Cloud Services, needs a way to authenticate. Either the machine has a credential, a credential is stored in an environmental variable, or a credential is directly loaded by code. Let's fix the problem using the environmental variable approach. In your Cloud Console for your class project, use the hamburger menu to navigate to the `IAM & Admin | Service Accounts` page. 
+
+7. Create a new service account. Name it "slick-remote" and press `Create`
+
+8. Use the `Select a role` dropdown and give the Service Account (SA) the `Project Editor` role. That will work well for us but be warned, in production the SA should have minimum permissions and Project Editor it probably not a good choice.
+
+9. Press `Continue` and Done. 
+
+10. Locate the new SA and press the triple dot menu to its right. `Create key`.  
+
+11. Accept the default JSON format and `Create` the new key. The key will auto download to your downloads folder. Rename the file "key.json". 
+
+12. Let's move the file closer to the app. In the folder just above where your local slick-tickets sits, create a colder named "credentials". Move the key file into the new `credentials` folder.  I like the key file close, but I don't want it to become part of the repository itself. You can also rename the file if you like. 
+
+13. Switch to the VSC terminal window. 
+
+14. Create a new environmental variable named GOOGLE_APPLICATION_CREDENTIALS and set it equal to the path to your key file. The below is an example, but the path will need to be updated:
+
+```
+export GOOGLE_APPLICATION_CREDENTIALS="~/Course/credentials/my-key.json"
+```
+
+15. In the terminal window, change back into there re-executing the  (it will probably fail, keep reading).
+
+```
+node translate-text.js
+```
+
+<!-- ------------------------ -->
+## Test the Events Service locally
+Duration: 15
 
 ### Add the Feature to the Events Service
-If you are new to MVC application development, this part will be a challenge. This is real server-side web application development. Your instructor will help orient you, you can always ask for direction especially in getting started, and also consider pairing up with someone and working together. Pair programming is very common in application development. Also if time is short, or this task proves too frustrating, feel free to skip ahead to the Cloud Funtions exercise below. You'll have time at the end of class to come back to this translation feature if you'd like.
-
-When you go to add a feature in an MVC application you have to consider the route, model, view, and controller. In our case, we don't have true models since we are relying on Firestore to handle the database interactions. Also, our views are only in the web app, so for the events service we need only consider route and controller. When we integrate with the web app we'll need to consider its route, view, and controller. 
+If you are new to MVC application development, this part will be a challenge. This is a real server-side web application development. Your instructor will help orient you, you can always ask for direction especially in getting started, and also consider pairing up with someone and working together. Pair programming is very common in application development. 
 
 **Important Note:**
-Remember that query parameters are key-value pairs that come after a question mark at the end of a URL. They do not change what route you are making a request to, they simply add additional information to it. 
+Remember that query string parameters are key-value pairs that come after a question mark at the end of a URL. 
 
-There are multiple ways you could approach this, but here is one possible solution. Start by adding the functionality to the events service:
-1. Add the functionality to this route (see routes.js): router.get('/events/:slug', controller.getEvent).
-2. Expect a query parameter specifying a language other than English if desired, example: https://www.slicktickets.com/events/my-event-slug?language=fr.
-3. You can pull that information in the controller method (getEvent) using: req.query.language
-4. If that is defined, then before returning the event text, make the call to the Translation API to translate the event body text according to the language specified (target).
-5. You will need to modify the example function you were given to take in the event body text and target language. You do not need to console.log the translated text, rather you will respond with it. 
+Like https://www.google.com/search?q=dog
 
-**Important Note:**
-In Express, as in most web frameworks, you may not try to respond twice. Be sure to have an 'if' statement that checks to see if req.query.language is defined, and if its not, just respond as you have been. In the 'else', you can respond with the translated text. That way you don't try to respond both ways and cause an error. 
+They do not change what route you are making a request to, they simply add additional information to it. 
 
-You can test your new endpoint in a browser, or in Postman. Simply run the service locally with Node.js (node server) and make a request to the URL. Example:
+Our application displays a list of events. How about we want to add a translation feature that takes a query string, if present, and uses that to optionally translate events:
+
+1. Let's take a moment to get the events-service running on our local machine. In VSC, create a new file in the events-service folder named ".env"
+
+2. In .env add the following:
+
 ```
-http://localhost:3000/get-events/[MY_EVENT_SLUG]?language=fr
+PORT=3001
+SERVICE_ACCOUNT_FILE=key.json
 ```
 
-You will probably get errors when you first try to run one of the services locally. Go through the README file for Slick Tickets and configure your service account and environment variables as it instructs. If you have trouble, ask your instructor right away rather than spend time debugging the setup. 
+3. Using the terminal window in VSC, make sure you are in the events-service folder and execute the application:
 
-### Add the Feature to the Web App
-Adding the feature to your events service is only half the battle. Next, you need to actually consume the new feature in the web app to make it available to end users. Again there are multiple approaches, but here is only example:
-1. In the events list, put labels for each language (start with just one); i.e., FR, French, or use the country flag.
-2. Consider this route in your web app: router.get('/event/:slug', eventsController.viewEvent); that is the route that gets called when a user clicks an event in the event list.
-3. In the viewEvent controller method, again expect a query parameter specifying language, and pass that along when you make the request to your events service.
-4. Finally, linkify the label or icon you used for the language, and add the query parameter to the link, so when the user clicks that button it links to the same event page, but with the appropriate language in the query parameter
-5. Run it and test it. If it all works, git add commit and push it (to your origin).
-6. Build a new container image and deploy it with Cloud Run, but instead of doing it the way you did before, this time try using Cloud Code (instructions follow).
+```
+npm start
+```
+
+Note: If you see a "metadataLookupWarning" ignore it. 
+
+4. Test your application by opening a browser and navigating to http://localhost:3001/events you should see a list of your events. If you installed the YARC extension in Chrome, you can use that instead of the standard browser interface if you prefer. Jot down one of the event slugs and navigate directly to that event by modifying the URL http://localhost:3001/events/your-slug. Pay attention to the format of the returned event. 
+
+5. Now let's add our translation functionality. Use VSC to open the `events-service/routes.js` file. Notice how calls to the path **/events/:slug** are passed to **controller.getEvent**. 
+
+6. Now open the `controller.js` file and locate the `exports.getEvent` function definition. So this is the code that currently reads the slug and then calls the "getOneEvent" utility function to retrieve the event. 
+
+You might have noticed when testing the app above, that a returned event takes the form:
+
+```
+{
+  "name": "Cool Event",
+  "attendees": [],
+  "slug": "cool-event",
+  "description": "Cool Description",
+  "id": "7POXQHrvbfV080bfAZJX"
+}
+```
+So if we're doing a translation, then we really need to update the value for the name and the description. 
+
+<!-- ------------------------ -->
+## Translate our events to Spanish
+Duration: 20
+
+### Activate the translation code
+
+Since this isn't really a programming class, the code to translate event names and descriptions has been added to our controller, we simply have to uncomment it. To facilitate this process, a series of comments have been inserted in the code using the format:
+
+```
+//TODO: #
+```
+
+1. Make sure you are in VSC and are looking at the "events-service/controller.js" file. 
+
+2. Locate the comment //TODO: 1 and perform the instructions you find there. Continue through TODO: 2 and TODO: 3, then return to the below step. 
+
+3. Make sure to save your edited code file.
+
+4. In the VSC terminal window, stop the running application if needed by pressing ctrl-c. 
+
+5. Restart the events-service.
+
+```
+npm start
+```
+
+6. Make sure the application is still working for non-translation events by re-invoking the service by visiting its url, using one of your event slugs. The URL will be something like: http://localhost:3001/events/your-slug 
+
+7. Besides checking for proper returned data in the browser, also check the VSC terminal for error messages. 
+
+8. If everything is looking good, then modify the URL and add a language=es query string. "es" being the code for Spanish. Like: http://localhost:3001/events/your-slug?language=es
+
+9. Verify that the returned JSON is now displaying the translated name and description. 
+
+<!-- ------------------------ -->
+## Deploy to Google Cloud
+Duration: 15
 
 ### Deploy to Cloud Run with Cloud Code
-1. Click the **Cloud Code - Cloud Run** icon to the left.
-2. If you don't see your services, hover over the project name, click the icon with two opposing arrows, and switch to you project.
-3. Hover over your events service and click the deploy icon (cloud with an up arrow).
-4. Fill out the information, make sure to reference the correct image name, and hit **Deploy**.
-5. While it's deploying, click the **Show Detailed Logs** button and when it says 'successful', go try it out. It may keep acting like it's in process even after it's done. 
 
-That's it! Once you had your environment set up and configured, you never had to leave VS Code to write the feature, check it in with Git, create the new image, and deploy it to Cloud Run. You might not have even noticed that you created a new container image since Cloud Code did so much of the work for you. This is the bleeding edge of modern application development.
+1. Hover over the icons along the left edge of VSC until you find the one for `Cloud Code - Cloud Run`. Click it. 
+
+2. If you don't see your services, hover over the project name, click the icon with two opposing arrows, and switch to you project. 
+
+3. Hover your pointer over your events-service and click the `Deploy to Cloud Run` icon (cloud with an up arrow).
+
+4. Wait for the configuration page to display. In `Service Settings`, verify that the `events-service`is selected. 
+
+5. In `Revision Settings` set the container image URL to: `gcr.io/your-class-project-name/events-service`. You may need to edit the end and change it from "slick-tickets" to "events-service"
+
+6. Scroll to the bottom and press `Deploy`. Press `Show Detailed Logs` so you can watch the log messages in Output at the bottom of VSC.
+
+7. Once the new version successfully deploys, open the Google Cloud console for your class project. Then use the hamburger menu to navigate to `Container Registry`. 
+
+8. Click on your `events-service` and investigate the new image. Notice the label it added. 
+
+9. Use the hamburger menu to navigate to `Cloud Run`, and click on your `events-service`. 
+
+10. Click the `Details` tab and notice when the current version was deployed. Should be recently. 
+
+11. Click on the service link to execute the service. You'll get an error. add "/events/your-event-slug" to the URL and click Enter. It should properly return the event. 
+
+12. Now, add "language=es" to the end of the URL and check out the new functionality. 
+
+Great work!
+
+Once you had your environment set up and configured, you never had to leave VS Code to write the feature, check it in with Git, create the new image, and deploy it to Cloud Run. You might not have even noticed that you created a new container image since Cloud Code did so much of the work for you. This is the bleeding edge of modern application development.
+
 
 <!-- ------------------------ -->
-## Add a Go Cloud Function to Slick Tickets
+## Super Bonus
 Duration: 30
+### Add the Feature to the Web App
+Adding the feature to your events service is only half the battle. Next, you need to actually consume the new feature in the web app to make it available to end users. Again there are multiple approaches, but here is one possible solution:
 
-### Create a Simple Go Cloud Function
-Create a simple test Cloud Function using the GUI. The GUI is a great place to try something out for the first time and see the options that are available without needing to reference documentation. Later, when doing a task routinely or in real environments, you'd be more likely to use the CLI or something like Terraform. 
+1. In the events list, put labels for each language (start with just one); i.e., FR, French, or use the country flag.
 
-Take the default options except check the box to **Allow unauthenticated invocations** and switch the runtime to Go 1.11. 
+2. Consider this route in your web app: router.get('/event/:slug', eventsController.viewEvent); that is the route that gets called when a user clicks an event in the event list.
 
-After it's running, click the trigger and you'll see that it says "Hello World." 
+3. In the viewEvent controller method, again expect a query parameter specifying language, and pass that along when you make the request to your events service.
 
-Feel free to take some time and try modifying it and getting comfortable with Go before moving on. As an example, you could change line 18 to this:
-``` go
-fmt.Fprint(w, r.URL.Query()["message"])
-```
+4. Finally, linkify the label or icon you used for the language, and add the query parameter to the link, so when the user clicks that button it links to the same event page, but with the appropriate language in the query parameter
 
-That way, if it doesn't find a message on the body, it will pull the message from a query parameter (?message=some-message). 
+5. Run it and test it. If it all works, git add commit and push it (to your origin).
 
-### Create a Go Cloud Function for Use with Slick Tickets
-Choose some small bit of functionality you'd like to pull into a Cloud Function. Maybe something simple and not very practical, like counting the number of events. You could in that case pass it the number of events, or you could have it integrate with Firestore directly. A slightly more realistic application would be to have it generate HTML for a printed ticket. A very realisitic task would be something CPU intensive that occurred irregularly, for example, a customer generating some report on years of their purchase history. 
-
-Whether you choose something simple or complex, you are going to have inputs and outputs. That is to say, you are going to need to send some information to the Cloud Function, and you are going to expect it to return things to you. Here is a slightly more robust version of the sample code that responds with errors if they occur, and handles multiple inputs:
-``` go
-// Package p contains an HTTP Cloud Function.
-package p
-
-import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-)
-
-type Message struct {
-    Title string
-    Body  string
-}
-
-func HelloWorld(w http.ResponseWriter, r *http.Request) {
-    var m Message
-
-    // Try to decode the request body into the struct. If there is an error,
-    // respond to the client with the error message and a 400 status code.
-    err := json.NewDecoder(r.Body).Decode(&m)
-    if err != nil {
-        http.Error(w, fmt.Sprintf("error: %s", err.Error()), http.StatusBadRequest)
-        return
-    }
-
-    // Respond with a JSON string containing the message.
-    fmt.Fprintf(w, `{"message": {"title": "%s", "body": "%s"}}`, m.Title, m.Body)
-}
-```
-
-There are two especially key lines here. First, let's consider this one:
-``` go
-err := json.NewDecoder(r.Body).Decode(&m)
-```
-
-In this line, an err variable is declared and assigned simulatenously using the := operator; we hope that this will come back defined as nil, which it will as long as there is no error in decoding. We are using the standard package json, a method on it called NewDecoder, passing in the body off the request (r, similar to req in Node and Express), and then running the Decode method off of that, and providing a pointer to our variable 'm' we created earier. Ideally, our decoder methods will find appropriate values on the body and populate the struct m with them. 
-
-Here's another key line where the response occurs:
-``` go
-fmt.Fprintf(w, `{"message": {"title": "%s", "body": "%s"}}`, m.Title, m.Body)
-```
-
-Here, we are using another standard library built into Go, fmt, for formating and writing text. In this case, we want to write down the socket to the client who made the request to our server. We are passing "w" which is the response writer (similar to res in Node and Express), the string to be written, and then some variable values to substitute into the string. They simply happen in order, so m.Title will substitute in for the first %s and m.Body will substitute in for the second %s. This is called string interpolation, and will tend to look a bit stranger in strongly typed languages like Go vs. dynamically typed languages like Python and JavaScript where we don't have to worry about specifying type. In this case with Go and %s, the 's' stands for string. 
-
-That should give you enough to at least do a super simple Go Cloud Function that takes in some inputs on the body, does something with them like forming a new string, and responds with that new string back to the client (which in this context will probably be a Cloud Run service). 
-
-To test your function, you can use Postman. Be sure to use a **POST** request on the **raw** option for body, and put the body in JSON format using double quotes for all properties and values. Example:
-``` json
-{"title": "Greetings!", "body": "Hope you are well."}
-```
-
-As an alternative to Postman, you could simply use curl from Cloud Shell or your local machine:
-[https://www.educative.io/edpresso/how-to-perform-a-post-request-using-curl](https://www.educative.io/edpresso/how-to-perform-a-post-request-using-curl).
-
-### Consume the Cloud Function from Cloud Run
-Your Cloud Function is just another microservice to be consumed by the web app, events service, or users service in Slick Tickets. So as an example, review how the web app consumes the events service or users service. Look inside the web app folder, then in the controllers folder, and review the events controller. In particular, look at how fetch is used to make requests to the events service. Here's an example:
-``` javascript
-exports.listEvents = function (req, res) {
-  fetch(`${eventsService}/events`)
-    .then(serviceRes => serviceRes.json())
-    .then(json => res.render('list-events', json))
-    .catch(err => res.redirect('/events'))
-}
-```
-
-Remember that this is using simple one-line arrow function syntax, but almost the exact same thing could be coded in an expanded way like this:
-``` javascript
-exports.listEvents = function (req, res) {
-  fetch(`${eventsService}/events`)
-    .then(serviceRes => serviceRes.json())
-    .then(function (json) {
-      // can do more here
-      res.render('list-events', json)
-      // or even here if you want
-    })
-    .catch(err => res.redirect('/events'))
-}
-```
-
-This opens up more lines for doing more things as noted in the comments. 
-
-Try writing your own fetch call somewhere in this controller, or another, that interacts with your Cloud Function. If you are new to coding, you may not have time to complete the integration, but will have more time at the end of class to come back to it if you wish. As you do work on challenging labs like this, be sure to reach out to your instructor for support when you get stuck; don't spend more than 5 minutes stuck on any one bug or being unsure of what step to take next. 
-
-<!-- ------------------------ -->
-## Cleanup
-Duration: 1
-
-No special cleanup should be required in this case. You can delete the things you've created, but they should not incur charges as they are serverless products that have a free tier and are only used when accessed. 
+6. Build a new container image and deploy it with Cloud Run, but instead of doing it the way you did before, this time try using Cloud Code (instructions follow).
