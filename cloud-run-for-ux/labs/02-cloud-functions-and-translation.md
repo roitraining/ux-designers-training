@@ -123,7 +123,7 @@ node translate-text.js
 export GOOGLE_APPLICATION_CREDENTIALS="~/Course/credentials/my-key.json"
 ```
 
-15. In the terminal window, change back into there re-executing the (it will probably fail, keep reading).
+15. In the terminal window, re-execute the app.
 
 ```
 node translate-text.js
@@ -265,6 +265,6 @@ Adding the feature to your events service is only half the battle. Next, you nee
 
 4. Finally, linkify the label or icon you used for the language, and add the query parameter to the link, so when the user clicks that button it links to the same event page, but with the appropriate language in the query parameter.
 
-5. Run it and test it. If it all works, git add commit and push it (to your origin).
+5. Run it and test it. If it all works, `git add commit` and `push` it to your origin.
 
-6. Build a new container image and deploy it with Cloud Run, but instead of doing it the way you did before, this time try using Cloud Code (instructions follow).
+6. Update your Cloud Run version of the application using Cloud Code, then test. 
