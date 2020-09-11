@@ -168,8 +168,8 @@ Duration: 15
 6. Take a moment to add at least one event. 
 
 <!-- ------------------------ -->
-## Bonus
+## Super Bonus
 Duration: 15
 
-**SUPER-BONUS: Configure Service-to-Service Authentication**<br>
-To complete this Bonus step, you'll need to recreate your events and users services to not allow unauthenticated invocations. Next, follow the instructions for [Authenticating service-to-service](https://cloud.google.com/run/docs/authenticating/service-to-service) on Cloud Run.
+### Configure Service-to-Service Authentication<br>
+To complete this, you'll need to recreate your events and users services to not allow unauthenticated invocations. Next, follow the instructions for [Authenticating service-to-service](https://cloud.google.com/run/docs/authenticating/service-to-service) on Cloud Run.
