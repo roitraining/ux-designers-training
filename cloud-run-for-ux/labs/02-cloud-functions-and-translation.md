@@ -160,7 +160,7 @@ SERVICE_ACCOUNT_FILE=key.json
 npm start
 ```
 
-**Note:** If you see a "metadataLookupWarning", ignore it. 
+**Note:** If you see a *metadataLookupWarning*, ignore it. 
 
 4. Test your application by opening a browser and navigating to http://localhost:3001/events, and you should see a list of your events. If you installed the YARC extension in Google Chrome, you can use that instead of the standard browser interface if you prefer. Jot down one of the event slugs and navigate directly to that event by modifying the URL: http://localhost:3001/events/your-slug. Pay attention to the format of the returned event. 
 
