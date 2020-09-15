@@ -42,7 +42,7 @@ Duration: 20
 
 Now let's deploy a basic web application to the VM. 
 
-1. Switch to the Google Cloud console and use the hamburger menu to navigate to `Compute Engine`. Click `SSH` to open an SSH session with your new storage-example VM.
+1. Switch to the Google Cloud console and use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to `Compute Engine`. Click `SSH` to open an SSH session with your new storage-example VM.
 
 2. If you have Cloud Shell in one tab, and the new SSH session to the VM in another tab, make sure you are in the VM SSH session tab and not in Cloud Shell. 
 
@@ -108,7 +108,7 @@ app.listen(port, () => console.log(`Example app listening at http://localhost:${
 sudo node index.js
 ```
 
-12. In the Google Cloud console, use the hamburger menu to navigate back to `Compute Engine`. Click your VM's external IP address; it should be linkified.
+12. In the Google Cloud console, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate back to `Compute Engine`. Click your VM's external IP address; it should be linkified.
 
 **Important Note:** Normally, you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
@@ -118,7 +118,7 @@ Duration: 30
 
 ### Create a Cloud Storage Bucket for Your Application
 
-1. In the Google Cloud console for your project, use the hamburger menu to navigate to `Storage`. 
+1. In the Google Cloud console for your project, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to `Storage`. 
 
 2. Hit `Create Bucket` at the top of the page to start the creation of a new storage bucket. Storage bucket names need to be globally unique. Enter a name you think might work and hit `Continue`. If the bucket name is taken, repeat this process until you have found a name that works. 
 
