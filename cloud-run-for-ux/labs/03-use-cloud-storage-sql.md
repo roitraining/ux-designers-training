@@ -173,7 +173,7 @@ app.get('/add-file', function (req, res) {
 })
 ```
 **Note:**<br>
-A "route" in this context is a URL pattern your web application will respond to. So, if someone visits your app's `url/`, they get the Hello World message. With the above new code, if they visit your app's `url/add-file`, they get the ability to upload a file. 
+A "route" in this context is a URL pattern your web application will respond to. So, if someone visits your app's `url/`, they get the "Hello World" message. With the above new code, if they visit your app's `url/add-file`, they get the ability to upload a file. 
 
 Notice that in the code we are looking for query parameters (key-value pairs that follow a URL after a question mark), then (for now) simply responding with text to show that our route and controller method are functioning in a basic form. 
 
