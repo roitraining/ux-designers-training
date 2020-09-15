@@ -27,13 +27,13 @@ Duration: 5
 gcloud compute instances create storage-example --zone=us-central1-a --scopes=storage-rw --tags=http-server
 ```
 
-2. To allow access to our server from the web, create a firewall rule to allow incoming http traffic to any machines with the network tag "http-server." You'll notice that's one of the options we used when creating the VM above.
+2. To allow access to our server from the web, create a firewall rule to allow incoming http traffic to any machines with the network tag `http-server`. You'll notice that's one of the options we used when creating the VM above.
 
 ``` bash
 gcloud compute firewall-rules create default-allow-http --direction=INGRESS --priority=1000  --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
 ```
 
-**Important Note:**
+**Important Note:**<br>
 By default, VMs on Compute Engine come with a Default Service Account that has Project Editor access. That is overkill for a typical application, but fortunately, also by default, the VM's ability to act against Google Cloud's APIs is further limited by scopes (this is only true when using the Compute Engine Default Service Account). Those scopes, by default, are set to allow writing to Cloud Operations, reading from Cloud Storage, and not much else. If you examine the above command we executed, you see we've elevated our access to read/write in Cloud Storage. An even better technique would be to create a new service account, custom tailored with the exact types of access we need. 
 
 <!-- ------------------------ -->
@@ -83,7 +83,7 @@ npm init
 npm install express --save
 ```
 
-9. Create a very simple hello world example web app. Start by opening `index.js` in the Nano editor:
+9. Create a very simple "Hello World" example web app. Start by opening `index.js` in the Nano editor:
 
 ``` bash
 nano index.js
@@ -101,7 +101,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-11. Exit Nano by pressing CTRL+X, Y, and ENTER to save the modified buffer.
+11. Exit Nano by pressing CTRL+X, then Y, and then ENTER to save the modified buffer.
 
 12. Start the application:
 
@@ -111,7 +111,7 @@ sudo node index.js
 
 13. In the Google Cloud Console, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate back to **Compute Engine**. Click your VM's external IP address; it should be linkified.
 
-**Important Note:** 
+**Important Note:**<br>
 Normally, you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
 <!-- ------------------------ -->
@@ -122,11 +122,11 @@ Duration: 30
 
 1. In the Google Cloud Console for your project, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to **Storage**. 
 
-2. At the top of the page, click **Create Bucket** to start the creation of a new storage bucket. Storage bucket names need to be globally unique. Enter a name you think might work and click **Continue**. If the bucket name is taken, repeat this process until you have found a name that works. 
+2. At the top of the page, click **Create Bucket** to start the creation of a new storage bucket. Storage bucket names need to be globally unique. Enter a name you think might work and click **Continue**. If the bucket name is taken, repeat this process until you find a name that works. 
 
-3. Set the bucket's location type to `Region` and set the bucket's location to `us-central1`, then click **Continue**. 
+3. Set the bucket's location type to `Region`, set the bucket's location to `us-central1`, and then click **Continue**. 
 
-4. Leave the storage class as `Standard`, scroll to the bottom of the page, then click **Create** to create the bucket. 
+4. Leave the storage class as `Standard`, scroll to the bottom of the page, and then click **Create** to create the bucket. 
 
 5. Make sure to record the name of your bucket because you'll need that in a bit. 
 
@@ -141,7 +141,7 @@ Duration: 30
 npm install @google-cloud/storage --save
 ```
 
-3. Use Nano to edit `index.js` and add the following after the "const port ..." line:
+3. Use Nano to edit `index.js` and add the following after the `const port ...` line:
 
 ``` javascript
 const {Storage} = require('@google-cloud/storage')
@@ -149,7 +149,7 @@ const storage = new Storage()
 const bucket = storage.bucket('[BUCKET_NAME]')
 ```
 
-4. Edit `'[BUCKET_NAME]'` and replace it with your bucket name prefaced by "gs://", like this: `'gs://your-bucket-name-here'`
+4. Edit `'[BUCKET_NAME]'` and replace it with your bucket name prefaced by `gs://`, like this: `'gs://your-bucket-name-here'`
 
 5. Save and exit, try running the app again, then exit it. We're just checking to make sure there are no errors. We'll actually use the bucket in the next step. 
 
@@ -172,10 +172,10 @@ app.get('/add-file', function (req, res) {
     res.send(`File name: ${fileName}, File Contents: ${fileContents}`)
 })
 ```
-**Note:** 
+**Note:**<br>
 A "route" in this context is a URL pattern your web application will respond to. So, if someone visits your app's `url/`, they get the Hello World message. With the above new code, if they visit your app's `url/add-file`, they get the ability to upload a file. 
 
-Notice, in the code we are looking for query parameters (key-value pairs that follow a URL after a question mark), then (for now) simply responding with text to show that our route and controller method are functioning in a basic form. 
+Notice that in the code we are looking for query parameters (key-value pairs that follow a URL after a question mark), then (for now) simply responding with text to show that our route and controller method are functioning in a basic form. 
 
 3. Use node to start your app again.
 
@@ -255,8 +255,8 @@ app.get('/read-file', function (req, res) {
 2. Restart your application and test it out just to make sure you get the response.
 
 ### Download File from Cloud Storage
-A nice download file example can be found here?:
-https://cloud.google.com/storage/docs/downloading-objects#storage-download-object-nodejs 
+A nice download file example can be found here:
+https://cloud.google.com/storage/docs/downloading-objects#storage-download-object-nodejs. 
 
 1. If you have your web application running, press CTRL+X to stop it. Also, verify that your command prompt is currently in the `my-app` folder of your VM SSH window.
 
@@ -281,14 +281,14 @@ const options = {
 };
 ```
 
-5. Then download the file:
+5. Then, download the file:
 
 ``` javascript
 // Downloads the file
 bucket.file(fileName).download(options);
 ```
 
-6. Explore the sample code here to see how to use `fs` to read a file: https://nodejs.dev/reading-files-with-nodejs
+6. Explore the sample code here to see how to use `fs` to read a file: https://nodejs.dev/reading-files-with-nodejs.
 
 7. Add a block of code to read the downloaded file and return it to the web page. This will take the place of the existing `res.send...` code. 
 
