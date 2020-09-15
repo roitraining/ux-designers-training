@@ -50,7 +50,7 @@ Add the Yet Another Rest Client (YARC) extension to your Google Chrome browser f
 git clone https://github.com/haggman/slick-tickets.git
 ```
 
-2. In the Google Cloud Console, use the hamburger menu to view your project's **Source Repositories**. Make sure you are in the project you've been using for this course.
+2. In the Google Cloud Console, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to view your project's **Source Repositories**. Make sure you are in the project you've been using for this course.
 
 2. In the top right, click the **Add repository** button. Create a new repository and name it `slick-tickets`. Place the repository in your class project. 
 
@@ -101,7 +101,7 @@ npm i
 node translate-text.js
 ```
 
-6. Most likely, you got an authentication error. Code running on a remote machine, that's reaching out to Google Cloud Services, needs a way to authenticate. Either the machine has a credential, a credential is stored in an environmental variable, or a credential is directly loaded by code. Let's fix the problem using the environmental variable approach. In your Google Cloud Console for your class project, use the hamburger menu to navigate to the **IAM & Admin > Service Accounts** page. 
+6. Most likely, you got an authentication error. Code running on a remote machine, that's reaching out to Google Cloud Services, needs a way to authenticate. Either the machine has a credential, a credential is stored in an environmental variable, or a credential is directly loaded by code. Let's fix the problem using the environmental variable approach. In your Google Cloud Console for your class project, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to the **IAM & Admin > Service Accounts** page. 
 
 7. Create a new service account. Name it `slick-remote` and click **Create**.
 
@@ -233,11 +233,11 @@ Duration: 15
 
 6. Scroll to the bottom and click **Deploy**. Click **Show Detailed Logs** so you can watch the log messages in **Output** at the bottom of VSC.
 
-7. Once the new version successfully deploys, open the Google Cloud Console for your class project. Then, use the hamburger menu to navigate to **Container Registry**. 
+7. Once the new version successfully deploys, open the Google Cloud Console for your class project. Then, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to **Container Registry**. 
 
 8. Click your `events-service` and investigate the new image. Notice the label it added. 
 
-9. Use the hamburger menu to navigate to **Cloud Run**, and click your `events-service`. 
+9. Use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to **Cloud Run**, and click your `events-service`. 
 
 10. Click the **Details** tab and notice when the current version was deployed. It should be recently. 
 
