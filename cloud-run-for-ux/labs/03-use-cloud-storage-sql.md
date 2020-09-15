@@ -183,7 +183,7 @@ Notice that in the code we are looking for query parameters (key-value pairs tha
 sudo node index.js
 ```
 
-4. Visit your application again using its external IP. Remember, that IP is easily found on the Compute Engine page. Once you receive the "Hello World!" message, edit the URL by adding `/add-file?fileName=test.txt&fileContents=Hello%20World` to the end. Your result should be a URL something like this: http://[YOUR_VMS_IP]/add-file?fileName=test.txt&fileContents=Hello%20World
+4. Visit your application again using its external IP. Remember, that IP is easily found on the Compute Engine page. Once you receive the "Hello World" message, edit the URL by adding `/add-file?fileName=test.txt&fileContents=Hello%20World` to the end. Your result should be a URL something like this: http://[YOUR_VMS_IP]/add-file?fileName=test.txt&fileContents=Hello%20World
 
 
 5. Verify that you get a return message like this:
@@ -276,7 +276,7 @@ const fullPath = `./downloads/${fileName}`;
 
 ``` javascript
 const options = {
-  // The path to which the file should be downloaded, e.g. "./file.txt"
+  // The path to which the file should be downloaded, e.g., "./file.txt"
   destination: fullPath
 };
 ```
@@ -309,7 +309,7 @@ app.get('/read-file', function (req, res) {
   const fullPath = `./downloads/${fileName}`;
 
   const options = {
-    // The path to which the file should be downloaded, e.g. "./file.txt"
+    // The path to which the file should be downloaded, e.g., "./file.txt"
     destination: fullPath
   };
 
@@ -328,6 +328,3 @@ app.get('/read-file', function (req, res) {
 ```
 
 9. Save your code and re-run the application. Make sure to test it on the file you stored in Cloud Storage in the last section of the exercise. If all went well, you should be able to use your `/read-file` endpoint to get the contents of a file on Cloud Storage.
-
-
-Great job!
