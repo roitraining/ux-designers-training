@@ -24,13 +24,13 @@ We are going to continue to use the sample application from our last class, Slic
 
 1. Log in to [Google Cloud](https://console.cloud.google.com/) using the trial account you created for this course. You should not be using your actual work Google account. If you do, you will have security issues. 
 
-2. Check the dropdown to the right of the main navigation (hamburger) menu and ensure you are working in an appropriate project. 
+2. Check the dropdown to the right of the main **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) and ensure you are working in an appropriate project. 
 
-3. Use the hamburger menu to visit **Firestore**. 
+3. Use the **Navigation menu** to visit **Firestore**. 
 
 4. We need to activate Firestore so it will be ready to store data when we run our application. Let's use Native mode by clicking **Select Native Mode**. Set the **Region** to `nam5 (United States)` and click **Create Database**.
 
-5. Activate Cloud Shell using the cursor icon near the upper right corner of the Google Cloud Console. Make sure when it comes up that the current context (text at the top of the Cloud Shell tab) is the same as the project where you are working. 
+5. Activate Cloud Shell using the cursor icon near the upper-right corner of the Google Cloud Console. Make sure when it comes up that the current context (text at the top of the Cloud Shell tab) is the same as the project where you are working. 
 
 6. Clone the Slick Tickets sample application into Cloud Shell:
 
@@ -71,14 +71,14 @@ gcloud builds submit . -t gcr.io/$DEVSHELL_PROJECT_ID/users-service:v1.0
 
 12. Using the same steps, change up and over into the `web-app` folder and build that image as well. Once again, store it in the GCR for your project in a `web-app` folder. 
 
-13. Switch to the Google Cloud Console in your browser and use the hamburger menu to navigate to the **Container Registry** (under **Tools**). Verify your three service image folders and if you like, drill down into them and investigate the images themselves. 
+13. Switch to the Google Cloud Console in your browser and use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to the **Container Registry** (under **Tools**). Verify your three service image folders and if you like, drill down into them and investigate the images themselves. 
 
 
 <!-- ------------------------ -->
 ## Deploy Services to Cloud Run
 Duration: 15
 
-Here you'll get to see the beauty of Cloud Run and how simple it is compared to other Google Cloud compute options. In the Google Cloud Console, use the hamburger to navigate to **Cloud Run**. Then, perform the following steps to create a Cloud Run service for each of our apps. Do the `web-app` last. 
+Here you'll get to see the beauty of Cloud Run and how simple it is compared to other Google Cloud compute options. In the Google Cloud Console, use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to **Cloud Run**. Then, perform the following steps to create a Cloud Run service for each of our apps. Do the `web-app` last. 
 
 1. Click **Create Service**.
 
@@ -139,7 +139,7 @@ Try making a change to your web application and then redeploy a new revision thr
 cd ~/slick-tickets/app/web-app
 gcloud builds submit . -t gcr.io/$DEVSHELL_PROJECT_ID/web-app:v1.1
 ```
-6. Once the build completes, switch to the Google Cloud Console and use the hamburger menu to navigate to the Cloud Run home page. 
+6. Once the build completes, switch to the Google Cloud Console and use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to the Cloud Run home page. 
 
 7. Click **web-app** to view its details, and then click **Edit & Deploy New Revision**. Changing the container image, or any of the other variables or settings, is accomplished by creating a new revision of the same service. 
 
@@ -155,7 +155,7 @@ Take a few moments to review the features and options. In particular, try clicki
 ## Make Yourself an Application Administrator
 Duration: 15
 
-1. Switch to the Google Cloud Console and use the hamburger menu to navigate to **Firestore**.
+1. Switch to the Google Cloud Console and use the **Navigation menu** (![console_nav_small.png](img/console_nav_small.png)) to navigate to **Firestore**.
 
 2. Navigate into the **users** data collection and find your user. The user id you won't recognize, but if you select the user (you probably only have one), you will be able to identify your name and email. 
 
