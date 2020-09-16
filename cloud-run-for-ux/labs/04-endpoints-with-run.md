@@ -156,7 +156,7 @@ curl https://raw.githubusercontent.com/GoogleCloudPlatform/esp-v2/master/docker/
 chmod +x gcloud_build_image
 ```
 
-3. Run the script to build the service into a new container image, which gets uploaded to the Container Registry. Make sure to specify the `config ID` and `host name` you noted at the end of the last section. 
+3. Run the script to build the service into a new container image, which gets uploaded to the Container Registry. Make sure to specify the `host name`, and the `config ID` you noted at the end of the last section. 
 
 ```
 ./gcloud_build_image -s hostNameHere \
