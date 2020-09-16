@@ -111,19 +111,19 @@ definitions:
 ```
 
 3. Replace the host and address with your specific values. The host should be something like:
-`esp-gateway-blahblah-uc.a.run.app` (notice, no `https`, just the host). Then replace the address with the address for your events service. It will look something like this:
+`esp-gateway-blahblah-uc.a.run.app` (notice, no `https`, just the host). Then replace the address with the address for your `events` service. It will look something like this:
 `https://events-service-blahblah-uc.a.run.app`.
 
 4. Make sure the editor isn't displaying any errors. Take a moment and explore the right half of the page, which has some nice visualizations of what the file contains. Once you're satisfied, copy the modified contents of the file from the editor. 
 
-5. Switch to your Cloud Shell window, and to open the editor, click the button that reads `Open Editor` or looks like a pencil icon. 
+5. Switch to your Cloud Shell window, and to open the editor, click the button that reads **Open Editor** or looks like a pencil icon. 
 
-6. Expand `slick-tickets/app/events-service` and create a new file in that folder named `events-api.yaml`. Paste the OpenAPI file you copied a few steps ago into the new file. 
+6. Expand **slick-tickets/app/events-service** and create a new file in that folder named `events-api.yaml`. Paste the OpenAPI file you copied a few steps ago into the new file. 
 
 7. The Cloud Shell editor auto-saves, but if it makes you feel better, save the file. Then close the editor and switch back to the Cloud Shell terminal.
 
 ### Deploy the Endpoints Configuration
-Still following the linked example, we are now in this section: 
+Still following the linked example, we are now in the Deploying the Endpoints Configuration section: 
 https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#deploy_configuration.
 
 1. Make sure you are in the Cloud Shell terminal window.
@@ -144,10 +144,10 @@ gcloud endpoints services deploy events-api.yaml
 4. In the messages after the last command, locate the one that uses the format `Service Configuration [Your config ID] uploaded for service [host name]`. Take note of the `config ID` because you'll need it in a few steps. 
 
 ### Building a New ESPv2 Beta Image
-Still following the linked example, we are now in this section: 
+Still following the linked example, we are now in the Building a New ESPv2 Beta Image section: 
 https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#configure_esp.
 
-1. Follow the link above and read the Note at the top of the series of steps. This explains a bit why we are doing the next few steps. Tl;dr: Cloud Run needs the image to be standalone with the configuration built into it. 
+1. Follow the link above and read the **Note** at the top of the series of steps. This explains a bit why we are doing the next few steps. Tl;dr: Cloud Run needs the image to be standalone with the configuration built into it. 
 
 2. In Cloud Shell, download the service builder script and make it executable.
 
@@ -163,9 +163,9 @@ chmod +x gcloud_build_image
     -c configIdHere -p $DEVSHELL_PROJECT_ID
 ```
 
-4. When the image build completes, switch to the Google Cloud Console and look at the images in Container Registry. You should see a just deployed "endpoints-runtime-serverless". Hover over the image's name and a copy button should appear with the tool tip "Copy full image name." Copy the full name and drop it in a text document or something because you'll need it in the next step. 
+4. When the image build completes, switch to the Google Cloud Console and look at the images in Container Registry. You should see a just deployed "endpoints-runtime-serverless". Hover over the image's name and a **Copy** button should appear with the tool tip *Copy full image name*. Copy the full name and drop it in a text document or something because you'll need it in the next step. 
 
-5. Redeploy your "endpoints-runtime-serverless" service using your new image. You'll need to replace the image path with the one copied in the last step. Notice, this is mostly the exact same step we ran earlier to deploy the first, generic esp-gateway. `gcloud run deploy` both deploys new Cloud Run services, and updates existing. 
+5. Redeploy your `endpoints-runtime-serverless` service using your new image. You'll need to replace the image path with the one copied in the last step. Notice, this is mostly the exact same step we ran earlier to deploy the first, generic esp-gateway. `gcloud run deploy` both deploys new Cloud Run services, and updates existing. 
 
 ```
 gcloud run deploy esp-gateway \
@@ -174,7 +174,7 @@ gcloud run deploy esp-gateway \
     --platform managed
 ```
 
-6. Once the Cloud Run service successfully updates, it will display a message with the path to the service. It should take the form `https://esp-gateway-blah-uc.a.run.app`. Click the link to visit the service. At first, it will display an error message. Add `/events` to the end of the URL and the service should work. 
+6. Once the Cloud Run service successfully updates, it will display a message with the path to the service. It should take the form *https://esp-gateway-blah-uc.a.run.app*. Click the link to visit the service. At first, it will display an error message. Add `/events` to the end of the URL and the service should work. 
 
 It may not be immediately obvious how awesome this is, since really you just have a new URL that does the same thing as the old URL. But as systems evolve over time, abstracting the API gateway from the underlying infrastructure has myriad benefits. As mentioned at the beginning of this lab, the underlying infrastructure can change. But even if it doesn't, you may end up with multiple versions of your API, plus you now have access to all the other great Cloud Endpoints features that were discussed in class. 
 
@@ -198,7 +198,7 @@ Take a peek at the example in the editor when you first pull it up. It has a lot
 <!-- ------------------------ -->
 ## Bonus 2: Integrate Cloud Endpoints and Slick Tickets
 Duration: 10<br>
-**Note:** This will only work if you completed Bonus 1.
+**Note:** This only works if you completed Bonus 1.
 
 
 ### Update the Slick Tickets Application to Consume This API Gateway
@@ -207,7 +207,7 @@ Duration: 10<br>
 
 As a side note, if you also updated your `users` service to run through the gateway, the base URLs for both the services would be the same. One would be `/events` and one would be `/users`. Service consumers wouldn't need to even know that they were actually different services. Another nice Cloud Endpoints feature. 
 
-If you want to get fancy, and more real world, you could add `/v1/` into the URL structure (example: `/v1/events`) using the basePath option in OpenAPI specs. See this documentation:
+If you want to get fancy, and more real-world, you could add `/v1/` into the URL structure (example: `/v1/events`) using the basePath option in OpenAPI specs. See this documentation:
 https://cloud.google.com/endpoints/docs/openapi/versioning-an-api.
 
 This is so that if you release a breaking change to your API (not backward-compatible), you don't break applications that consume your API. Developers of those applications can read up on your changes and migrate to the new version when they feel ready. 
