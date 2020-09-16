@@ -19,9 +19,10 @@ Duration: 5
 Spend some time reviewing the official guide we'll use throughout this lab:
 https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run.
 
-Note that in this case, we will be using Cloud Run both to run the Cloud Endpoints control plane (ESP) and also as the underlying infrastructure/data plane (our microservices). Additionally, our web app that will consume the API gateway is itself running on Cloud Run. Each of these components could be on different infrastructure, and the great thing about Endpoints is that if we add or move microservices to different services (Compute Engine, GKE, Cloud Run for Anthos, Cloud Functions, App Engine), we would not have to change our application code that consumes those services!
+Note that in this case, we will be using Cloud Run both to run the Cloud Endpoints control plane (Extensible Service Proxy (ESP)) and also as the underlying infrastructure/data plane (our microservices). Additionally, our web app that will consume the API gateway is itself running on Cloud Run. Each of these components could be on different infrastructure, and the great thing about Endpoints is that if we add or move microservices to different services (Compute Engine, GKE, Cloud Run for Anthos, Cloud Functions, App Engine), we would not have to change our application code that consumes those services!
 
-You should also spend some time to check out the just in Beta Cloud API, which to some extent will replace Cloud Endpoints. 
+You should also take a look at the upcoming Google Cloud API Gateway, recently out in beta. It will soon provide a more managed option for Cloud Endpoints-type functionality: 
+https://cloud.google.com/blog/products/serverless/google-cloud-api-gateway-is-now-available-in-public-beta. 
 
 <!-- ------------------------ -->
 ## Install and Configure Endpoints
@@ -29,7 +30,7 @@ Duration: 30
 
 ### Deploying Extensible Service Proxy V2 Beta (ESPv2 Beta) to Cloud Run
 
-1. Take a look at the Deploying ESPv2 Beta section in the linked example above: https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#deploy_endpoints_proxy. What we are about to do is based on this document. 
+1. For future reference, we will be using a variation on the steps used in the aforementioned guide: https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run. What we are about to do is based on this document. 
 
 2. Locate or launch Cloud Shell and make sure you are working there (as opposed to your VM SSH window). Make sure it's associated with your working project by checking the tab at the top of the Cloud Shell interface. It should display your project name.
 
@@ -207,7 +208,6 @@ Duration: 10<br>
 
 As a side note, if you also updated your `users` service to run through the gateway, the base URLs for both the services would be the same. One would be `/events` and one would be `/users`. Service consumers wouldn't need to even know that they were actually different services. Another nice Cloud Endpoints feature. 
 
-If you want to get fancy, and more real-world, you could add `/v1/` into the URL structure (example: `/v1/events`) using the basePath option in OpenAPI specs. See this documentation:
-https://cloud.google.com/endpoints/docs/openapi/versioning-an-api.
+If you want to get fancy, and more real-world, you could add `/v1/` into the URL structure (example: `/v1/events`) using the basePath option in OpenAPI specs. See this documentation: https://cloud.google.com/endpoints/docs/openapi/versioning-an-api.
 
 This is so that if you release a breaking change to your API (not backward-compatible), you don't break applications that consume your API. Developers of those applications can read up on your changes and migrate to the new version when they feel ready. 
