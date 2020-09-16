@@ -29,7 +29,7 @@ Duration: 30
 
 ### Deploying Extensible Service Proxy V2 Beta (ESPv2 Beta) to Cloud Run
 
-1. Take a look at the Deploying ESPv2 Beta from the above article: https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#deploy_endpoints_proxy. What we are about to do is based on this document. 
+1. Take a look at the Deploying ESPv2 Beta section in the linked example above: https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#deploy_endpoints_proxy. What we are about to do is based on this document. 
 
 2. Locate or launch Cloud Shell and make sure you are working there (as opposed to your VM SSH window). Make sure it's associated with your working project by checking the tab at the top of the Cloud Shell interface. It should display your project name.
 
@@ -54,7 +54,7 @@ gcloud run deploy esp-gateway \
 
 
 ### Configuring Endpoints
-We are continuing with the example linked at the beginning of our exercise. Specifically, we are now in Configuring Endpoints: https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#endpoints_configure. 
+We are continuing with the example linked at the beginning of our exercise. Specifically, we are now in the Configuring Endpoints section: https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#endpoints_configure. 
 
 Fundamentally, what we are doing here is using our hosted ESP to serve an API endpoint that maps to some underlying infrastructure, in this case, our events service. 
 
@@ -123,7 +123,7 @@ definitions:
 7. The Cloud Shell editor auto-saves, but if it makes you feel better, save the file. Then close the editor and switch back to the Cloud Shell terminal.
 
 ### Deploy the Endpoints Configuration
-Still following Google's example, we are now in this section: 
+Still following the linked example, we are now in this section: 
 https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#deploy_configuration.
 
 1. Make sure you are in the Cloud Shell terminal window.
@@ -144,7 +144,7 @@ gcloud endpoints services deploy events-api.yaml
 4. In the messages after the last command, locate the one that uses the format `Service Configuration [Your config ID] uploaded for service [host name]`. Take note of the `config ID` because you'll need it in a few steps. 
 
 ### Building a New ESPv2 Beta Image
-Still following Google's example, we are now in this section: 
+Still following the linked example, we are now in this section: 
 https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#configure_esp.
 
 1. Follow the link above and read the Note at the top of the series of steps. This explains a bit why we are doing the next few steps. Tl;dr: Cloud Run needs the image to be standalone with the configuration built into it. 
@@ -165,7 +165,7 @@ chmod +x gcloud_build_image
 
 4. When the image build completes, switch to the Google Cloud Console and look at the images in Container Registry. You should see a just deployed "endpoints-runtime-serverless". Hover over the image's name and a copy button should appear with the tool tip "Copy full image name." Copy the full name and drop it in a text document or something because you'll need it in the next step. 
 
-5. Redeploy your "endpoints-runtime-serverless" service using your new image. You'll need to replace the image path with the one copied in the last step. Notice, this is mostly the exact same step we ran earlier to deploy the first, generic esp-gateway. **gcloud run deploy** both deploys new Cloud Run services, and updates existing. 
+5. Redeploy your "endpoints-runtime-serverless" service using your new image. You'll need to replace the image path with the one copied in the last step. Notice, this is mostly the exact same step we ran earlier to deploy the first, generic esp-gateway. `gcloud run deploy` both deploys new Cloud Run services, and updates existing. 
 
 ```
 gcloud run deploy esp-gateway \
@@ -192,13 +192,13 @@ So far, we have only done one path, `/events`, in our Cloud Endpoints for our `e
 2. Use the Swagger editor (https://editor.swagger.io/) to update your `events-api.yaml` file to include the various paths and, if needed, object definitions. 
 
 **Tip:**<br>
-Take a peak at the example in the editor when you first pull it up. It has a lot of good examples. I like to open it in second tab so I can look to it for advice where needed. 
+Take a peek at the example in the editor when you first pull it up. It has a lot of good examples. I like to open it in a second tab so I can look to it for advice where needed. 
 
 
 <!-- ------------------------ -->
 ## Bonus 2: Integrate Cloud Endpoints and Slick Tickets
-Duration: 10
-Note: This will only work if you completed Bonus 1.
+Duration: 10<br>
+**Note:** This will only work if you completed Bonus 1.
 
 
 ### Update the Slick Tickets Application to Consume This API Gateway
