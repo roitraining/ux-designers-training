@@ -1,4 +1,4 @@
-summary: Deploy a VM on GCE and install the Google Cloud Logging and Monitoring agents
+summary: Deploy a Virtuam Machine on Google Compute Engine and install the Google Cloud Logging and Monitoring agents
 id: deploy-vm-with-agents
 categories: Operations for UXers
 tags: Google Cloud
@@ -12,6 +12,7 @@ Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8
 Duration: 1
 
 ### What You’ll Learn
+
 - How to create a Google Compute Engine virtual machine using the GUI
 - How to install the Logging and Monitoring agents
 - How to deploy a basic web application
@@ -21,48 +22,60 @@ Duration: 1
 ## Create a VM
 Duration: 3
 
-Choose a Google Cloud Project to work in.
-Navigate to Compute Engine Instances.
-Click **Create** or **CREATE INSTANCE** (the former is if you have no VMs currently).
-Name the VM 'agents-sample'.
-Near the bottom of the form, check the box to **Allow HTTP traffic**.
-Click **Create**.
+1. Choose a Google Cloud Project to work in. This should be a trial account you created specifically for this course. Warning: using your actual Google account will run you into a number of security related issues. 
+
+1. In the Google Cloud Console window, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Compute Engine**.
+
+1. Click **Create** or **CREATE INSTANCE** (the former is if you have no VMs currently) to create a new VM. Name the VM 'agents-sample' and near the bottom of the form, check the box to **Allow HTTP traffic**. Take a few minutes to explore the other VM options, including those under **Management, security, disks, networking, sole tenancy**. 
+
+1. After your perusal, click **Create**.
 
 <!-- ------------------------ -->
 ## Deploy a Basic Web Application
 Duration: 20
 
-While in the SSH window for your VM, run the following commands to install Nodejs:
+1. Once the `agents-sample` VM finishes creating, open an SSH to it by clicking **SSH** to the right of its name. 
+
+1. In the SSH window for your VM, run the following commands to install Nodejs:
+
 ``` bash
 sudo apt update
-sudo apt install nodejs npm
+sudo apt -y install nodejs npm
+```
+
+1. Once the installation completes, verify Node's installation by checking its version:
+
+``` bash
 node -v
 ```
 
-Create a directory to run the app from and move into it:
+1. Create a directory for our test application:
+
 ``` bash
 mkdir ~/my-app
 cd ~/my-app
 ```
 
-Initialize NPM (Node Package Manager):
+1. Node applications use a `package.json` file to house general information about the app and a list of application dependencies. Create a `package.json` for our new application interactively by executing the following command. Feel free to accept all the defaults (though you might want to add yourself as author):
+
 ``` bash
 npm init
 ```
 
-Take the default option for index.js by simply hitting Return.
+1. Let's add a dependency to our application for the Express webserver. This command will not only modify `package.json` but it will also download any required sub dependencies to the current folder, and into a `node-modules` folder.
 
-Install Express (an MVC framework and webserver):
 ``` bash
 npm install express --save
 ```
 
-Create a very simple hello world example app:
+1. Create and open a `index.js` file to serve as the main part of our application. You are welcome to use vi or node.
+
 ``` bash
 nano index.js
 ```
 
-Paste in the following JavaScript:
+1. Into the file, paste  the following JavaScript:
+
 ``` javascript
 const express = require('express')
 const app = express()
@@ -73,14 +86,15 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-Type Ctrl-O and return to save and then Ctrl-X to exit the Nano text editor.
+1. Exit the editor, saving the change. In Node you can hit **CTRL-X** to exit, **Y | Enter** to save the file using the same name.
 
-Run the application:
+1. Run the application to test it.
+
 ``` bash
 sudo node index
 ```
 
-Go back to the GCE GUI and click the VM's external IP address; it should be linkified if you checked the box for 'Allow HTTP Access.'
+1. Switch back to the **Compute Engine** page in the Google Cloud Console. Click the VM's external IP address; it should be linkified if you checked the box for 'Allow HTTP Access.'
 
 **Important Note:** Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
@@ -89,44 +103,35 @@ Go back to the GCE GUI and click the VM's external IP address; it should be link
 Duration: 10
 
 ### Monitoring
-Go to **Monitoring** in the GUI.
-Select **Metrics Explorer**.
-Search for 'compute cpu' and try both the version from the agent and from compute. Since you have not installed the agent, you won't get any data from it.
+
+1. In the Google Cloud console, use the **Navigation menu** to navigate to **Monitoring**. Wait while your new monitoring workspace creates.
+
+1. Select **Metrics Explorer**. Set the resource to **VM Instance** then for the metric enter **CPU load** and select the one with the 1m visibility. Do you see any data?
+
+1. Click **Dashboards | VM Instances** to see a list of your existing (one) VMs. Is the monitoring agent installed? That's why the last metric was blank. 
 
 <!-- ------------------------ -->
-## Install the Monitoring Agent
+## Install and test the Monitoring Agent
 Duration: 10
 
-SSH into your VM.
-Follow the [official documentation] (https://cloud.google.com/monitoring/agent/install-agent#agent-install-debian-ubuntu) for Debian (the default flavor of Linux on GCE). The notes below will help you navigate the process.
-**Notes:**
-* If you created the VM, you should have sudo access, which is root (admin) privilege
-* To start in your home directory as recommended, type:
-``` bash
-cd ~
-```
-* On step 4, run the commands one by one.
-* Review the instructions on pinning a major version for production environments, but for our purposes the final command for installing the latest version will suffice (sudo apt-get install stackdriver-agent)
-* You do not need to move on to optional tasks
+1. In the `Monitoring agent status` column click **Not detected**. Read the information presented, then **Install Agent**. A Cloud Shell window will launch. Accept the defaults and proceed through the installation.
 
-Wait a minute and then go to Monitoring and see if you are getting CPU utilization from the agent now.
+1. Once the install completes, close the Cloud Shell window and the installation dialog. Wait a couple of minutes and refresh the page. What does the `Monitoring agent status` column now display. Repeat if the status is still pending.
 
-### Logging
-Go to **Logging** in the GUI.
-Select your project, **'GCE Project, XXXXX'**.
-You might expect a log entry for 'Example app listening at...' but you won't see it. Installing the Logging Agent would give you more system logs, but you still wouldn't see console.log from Node.js. While this would work in managed services, for GCE you would need to use an explicit logging client library. Generally you would use both the Logging agent and a logging library.
+1. Select **Metrics Explorer**. Set the resource to **VM Instance** then for the metric enter **CPU load** and select the one with the 1m visibility. Do you see any data? This is not being reported from inside the VM thanks to the agent, rather than from outside the VM thanks to Google owning the hardware.
 
-Install the Logging agent by following [the official guide](https://cloud.google.com/logging/docs/agent/installation#agent-install-debian-ubuntu) for Debian. The steps are very similar to the steps to install the Monitoring agent. However there is an extra configuration step, while either option will work choose structured logging for better organization.
+<!-- ------------------------ -->
+## BONUS: Install and test the logging agent
+Duration: 15
 
-Next install a logging library and connect it to Cloud Logging follow the [official guide](https://cloud.google.com/logging/docs/setup/nodejs) for Node.js. After you have the NPM package installed and you have put the configuration code near the top of index.js, you can change your app.listen callback to use the new logger:
+Installing the logging agent is a bit more of a manual process. The logging agent passes log messages from code running on VMs, and from standard applications, to Google's Cloud Logging. If you would like to attempt it, please feel free to install the Logging agent using the below as a rough guide.
+
+1. Install the Logging agent by following the steps found in [the official guide](https://cloud.google.com/logging/docs/agent/installation#agent-install-debian-ubuntu) for Debian. You will need to execute these steps in the SSH session for your VM. If that's no longer open, remember the link may be found next to the VM name in **Compute Engine**. If it is still running the test web application, stop it using **CTRL-C**.
+
+1. To test the agent, augment your code by installing the logging library Winston and use it to record logs. Those steps can be found in this [official guide](https://cloud.google.com/logging/docs/setup/nodejs#using_winston) for Node.js. You will need to install the dependency and by adding a message into the script. To add a message to the script, modify the scripts final line to the following:
+
 ``` javascript
 app.listen(port, () => logger.info(`Example app listening at http://localhost:${port}`))
 ```
 
-After making the change and starting the app, go back to Cloud Logging and you should see your log line appear. Using Node's built in console.log will only display locally for developers, but logger.info will go to the logging tool.
-
-<!-- ------------------------ -->
-## Cleanup
-Duration: 1
-
-Don't forget to delete your VM when you are done with the lab. If you want to be able to reference it later, you can stop it instead of deleting it. You will still be charged for storing the disk, but it is a minimal charge compared to leaving a VM running.
+1. Restart the application, run it several times, then go back to Cloud Logging and you should see your log lines appear. Using Node's built in console.log will only display locally for developers, but logger.info will go to the logging tool.
