@@ -112,8 +112,8 @@ For reference, check the [documentation](https://cloud.google.com/storage/docs/g
 gsutil du -s gs://$BUCKET_NAME
 ```
 
-### How to alert runaway GCS Bucket size
-Consider how a company would get alerts if their GCS usage was spiking. They could put a Monitoring alert on total size, but the results would only be updated once a day.
+### How to alert runaway Cloud Storage bucket size
+Consider how a company would get alerts if their Cloud Storage usage was spiking. They could put a Monitoring alert on total size, but the results would only be updated once a day.
 
 If you needed more real-time data, you could do Bytes Received. But what if many files were written and deleted? Actual total storage cost might not be high. You could run a chron job that checked every "x" minutes with `gsutil` and reported a custom metric on total size.
 
