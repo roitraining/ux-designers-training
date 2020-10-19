@@ -90,7 +90,8 @@ Duration: 15
 
 4. In the **Query results** window, expand the entry(ies) and find the one where you (check *protoPayload.authenticationInfo.principalEmail*) created (*protoPayload.methodName*) your bucket, and its name (*protoPayload.resourceName*).
 
-**Hint:** Expanding the entry and then clicking **Expanded nested fields** may simplify your search.
+**Hint:**<br>
+Expanding the entry and then clicking **Expanded nested fields** may simplify your search.
 
 ### Monitoring
 
