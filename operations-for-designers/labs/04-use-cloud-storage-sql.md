@@ -23,24 +23,24 @@ Duration: 3
 
 ### Creating a VM using the CLI, and with the scopes we need
 
-1. Open Cloud Shell, if needed, and run the following command to create a new VM.
+1. Open Cloud Shell, if needed, and run the following command to create a new VM:
 
 ``` bash
 gcloud compute instances create storage-sql-example --tags=http-server --zone=us-central1-a --scopes=sql-admin,storage-rw
 ```
 
-**Important Note:**
-By default VMs on GCE come with a Default Service Account that has Project Editor access. Normally, that would be way overkill for a typical application, but fortunately also by default the VM's ability to act against Google Cloud's APIs is further limited by scopes (this is only true when using the Compute Engine Default Service Account). Those scopes, by default, are set to allow writing to Cloud Operations, reading from Cloud Storage, and not much else. Here we are specifying read/write access to Cloud Storage and access to Cloud SQL.
+**Important Note:**<br>
+By default, VMs on Compute Engine come with a Default Service Account that has Project Editor access. Normally, that would be way overkill for a typical application, but fortunately, also by default, the VM's ability to act against Google Cloud's APIs is further limited by scopes (this is only true when using the Compute Engine Default Service Account). Those scopes, by default, are set to allow writing to Cloud Operations, reading from Cloud Storage, and not much else. Here, we are specifying read/write access to Cloud Storage and access to Cloud SQL.
 
-It would be possible to connect to Cloud SQL without this scope, since you can whitelist your VMs IP address and then connect by normal SQL mechanisms. However, here we are going to use the Cloud SQL Proxy and authenticate through Google. You can read more about [permissions and the SQL Proxy](https://cloud.google.com/sql/docs/postgres/connect-compute-engine#gce-connect-proxy) in the documentation.
+It would be possible to connect to Cloud SQL without this scope, since you can whitelist your VMs IP address and then connect by normal SQL mechanisms. However, here, we are going to use the Cloud SQL Proxy and authenticate through Google. You can read more about [permissions and the SQL Proxy](https://cloud.google.com/sql/docs/postgres/connect-compute-engine#gce-connect-proxy) in the documentation.
 
 <!-- ------------------------ -->
 ## Deploying a basic web application
 Duration: 20
 
-Just like we did in the first lab, deploy a simple web application.
+Just like we did in the first lab, let's deploy a simple web application.
 
-1. In the Google Cloud console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Compute Engine** and click **SSH** next to your `storage-sql-example` machine.
+1. In the Google Cloud Console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Compute Engine**, and click **SSH** next to your `storage-sql-example` machine.
 
 2. In the `storage-sql-example` SSH session, install Node.js.
 
@@ -69,13 +69,13 @@ npm init
 npm i express
 ```
 
-6. Create a new **index.js** script file and open it for editing. The Cloud Shell editor won't work for this one so use Nano or vi.
+6. Create a new `index.js` script file, and open it for editing. The Cloud Shell editor won't work for this one so use Nano or vi.
 
 ``` bash
 nano index.js
 ```
 
-7. Paste in the following JavaScript into your new script file.
+7. Paste in the following JavaScript into your new script file:
 
 ``` javascript
 const express = require('express');
@@ -87,7 +87,7 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 ```
 
-8. Exit your editor, saving your changes. In Nano you can **CTRL-X** to exit, **Y** to save the modified buffer, and **RETURN** to overwrite the original file.
+8. Exit your editor, saving your changes. In Nano, you can press **CTRL+X** to exit, **Y** to save the modified buffer, and **RETURN** to overwrite the original file.
 
 9. Test execute the application.
 
@@ -95,10 +95,10 @@ app.listen(port, () => console.log(`Example app listening at http://localhost:${
 sudo node index
 ```
 
-10. In the Google Cloud console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Compute Engine**. Click the `storage-sql-example` VM's external IP address; it should be linkified because we created it with the `http-server` network tag, thus making it accessible through the firewall. Make sure you see the "Hello World!" message.
+10. In the Google Cloud Console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Compute Engine**. Click the `storage-sql-example` VM's external IP address; it should be linkified because we created it with the `http-server` network tag, thus making it accessible through the firewall. Make sure you see the "Hello World!" message.
 
-**Important Note:** 
-Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
+**Important Note:**<br> 
+Normally, you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
 <!-- ------------------------ -->
 ## Writing to Cloud Storage
@@ -106,7 +106,7 @@ Duration: 30
 
 ### Installing the Cloud Storage client library for Node.js
 
-1. Go back to the SSH window for your VM and exit the running app with **Ctrl-C**.
+1. Go back to the SSH window for your VM and exit the running app by pressing **CTRL+C**.
 
 2. Add Google's Cloud Storage library as an application dependency.
 
@@ -114,13 +114,13 @@ Duration: 30
 npm i @google-cloud/storage
 ```
 
-3. Edit index.js with Nano or vi. 
+3. Edit `index.js` with Nano or vi. 
 
 ``` bash
 nano index.js
 ```
 
-4. Add the following after the `const port = 80;` line.
+4. Add the following after the `const port = 80;` line:
 
 ``` javascript
 const {Storage} = require('@google-cloud/storage');
@@ -132,7 +132,7 @@ const bucket = storage.bucket('BUCKET_NAME');
 
 6. Save the file and exit the editor.
 
-7. Run app, then exit it. We're just checking to make sure there are no errors. We'll actually use the bucket in the next step.
+7. Run the app, then exit it. We're just checking to make sure there are no errors. We'll actually use the bucket in the next step.
 
 ``` bash
 sudo node index
@@ -142,7 +142,7 @@ sudo node index
 
 1. Reopen your script file in your editor.
 
-2. Create a `/add-file` route  to the application. We will eventually use it to create a new file in Cloud Storage, but for now let's just get the structure. The file name and contents will be passed into the method using query string parameters. Add the below JavaScript to the script file just after the app.get('/', ...) line.
+2. Create an `/add-file` route  to the application. We will eventually use it to create a new file in Cloud Storage, but for now, let's just get the structure. The file name and contents will be passed in to the method using query string parameters. Add the below JavaScript to the script file just after the `app.get('/', ...)` line.
 
 ``` javascript
 app.get('/add-file', function (req, res) {
@@ -152,7 +152,7 @@ app.get('/add-file', function (req, res) {
 });
 ```
 
-3. Save the file and run the app again.
+3. Save the file, and run the app again.
 
 ``` bash
 sudo node index.js
@@ -174,7 +174,7 @@ Filename: hello.txt, File Contents: Cool!
 
 1. In the SSH window for your VM, open your app in Nano.
 
-2. Create a route and controller method for our application to write the file to Cloud Storage. Add the below JavaScript just after your current route, `app.get('/', ...)`. Once you've made the change, save and exit Nano.
+2. Create a route and controller method for our application to write the file to Cloud Storage. Add the below JavaScript just after your current route, `app.get('/', ...)`. Once you've made the change, save, and exit Nano.
 
 ``` javascript
 app.get('/add-file', function (req, res) {
@@ -186,7 +186,7 @@ app.get('/add-file', function (req, res) {
 **Note:**<br>
 A "route" in this context is a URL pattern your web application will respond to. So, if someone visits your app's `url/`, they get the "Hello World" message. With the above new code, if they visit your app's `url/add-file`, they get the ability to upload a file. 
 
-Notice that in the code we are looking for query parameters (key-value pairs that follow a URL after a question mark), then (for now) simply responding with text to show that our route and controller method are functioning in a basic form. 
+Notice that in the code, we are looking for query parameters (key-value pairs that follow a URL after a question mark), then (for now) simply responding with text to show that our route and controller method are functioning in a basic form. 
 
 3. Use node to start your app again.
 
@@ -194,7 +194,7 @@ Notice that in the code we are looking for query parameters (key-value pairs tha
 sudo node index.js
 ```
 
-4. Visit your application again using its external IP. Remember, that IP is easily found on the Compute Engine page. Once you receive the "Hello World" message, edit the URL by adding `/add-file?fileName=test.txt&fileContents=Hello%20World` to the end. Your result should be a URL something like this: http://[YOUR_VMS_IP]/add-file?fileName=test.txt&fileContents=Hello%20World
+4. Visit your application again using its external IP. Remember, that IP is easily found on the Compute Engine page. Once you receive the "Hello World" message, edit the URL by adding `/add-file?fileName=test.txt&fileContents=Hello%20World` to the end. Your result should be a URL something like this: http://[YOUR_VMS_IP]/add-file?fileName=test.txt&fileContents=Hello%20World.
 
 5. Verify that you get a return message like this:
 
@@ -205,7 +205,7 @@ Filename: test.txt, File Contents: Hello World
 ### Creating a file locally
 `fs` is a module built into Node.js that helps when working with the file system. There's no need for you to install it, however, you do need to include it in `index.js`. 
 
-1. In your VM's SSH window, press CTRL+C to stop the running application. Then, open your `index.js` file in Nano. Just below the line where you create `bucket`, insert the following line to load `fs`.
+1. In your VM's SSH window, press **CTRL+C** to stop the running application. Then, open your `index.js` file in Nano. Just below the line where you create `bucket`, insert the following line to load `fs`:
 
 ``` javascript
 const fs = require('fs')
@@ -220,9 +220,9 @@ fs.writeFile(fileName, fileContents, function (err, data) {
 });
 ```
 
-3. Save the file, use Node to restart the app, and invoke it by re-visiting the `add-file` route in your browser: http://[YOUR_VMS_IP]/add-file?fileName=test.txt&fileContents=Hello%20World
+3. Save the file, use Node to restart the app, and invoke it by revisiting the `add-file` route in your browser: http://[YOUR_VMS_IP]/add-file?fileName=test.txt&fileContents=Hello%20World.
 
-4. Switch back to the SSH window. Stop the application by pressing CTRL+C, and do a directory listing of all your files. 
+4. Switch back to the SSH window. Stop the application by pressing **CTRL+C**, and do a directory listing of all your files. 
 
 ```
 ls
@@ -268,7 +268,7 @@ app.get('/read-file', function (req, res) {
 A nice download file example can be found here:
 https://cloud.google.com/storage/docs/downloading-objects#storage-download-object-nodejs. 
 
-1. If you have your web application running, press CTRL+X to stop it. Also, verify that your command prompt is currently in the `my-app` folder of your VM SSH window.
+1. If you have your web application running, press **CTRL+X** to stop it. Also, verify that your command prompt is currently in the `my-app` folder of your VM SSH window.
 
 2. Create a new folder named `downloads`. When we first pull the file back out of Cloud Storage, we will stage it here. 
 
@@ -282,7 +282,7 @@ mkdir downloads
 const fullPath = `./downloads/${fileName}`;
 ```
 
-4. Next, create an options argument and specify the path to where we will write the file in `downloads`. 
+4. Next, create an options argument and specify the path to where we will write the file in `downloads`: 
 
 ``` javascript
 const options = {
@@ -373,7 +373,7 @@ wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_pro
 chmod +x cloud_sql_proxy
 ```
 
-4. In the Google Cloud console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **SQL**, then click your **lab-example** instance.
+4. In the Google Cloud Console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **SQL**, then click your **lab-example** instance.
 
 5. From the `Connect to this instance` section, copy the `Connection name`.
 
@@ -392,9 +392,9 @@ echo $I_NAME
 
 ### Setting up a database and table
 
-1. Use the **Navigation menu** to navigate to **SQL** and click on your database, then click **Databases**. Create a database called **communication**.
+1. Use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **SQL** and click your database, then click **Databases**. Create a database called `communication`.
 
-2. Click on **Users** and **Add User Account**. Select **PostgreSQL** for the type, **test** for the `User name`, and enter a password of your choice. **Add** the user.
+2. Click **Users**, and then click **Add User Account**. Select **PostgreSQL** for the type, **test** for the `User name`, and enter a password of your choice. Click **Add** to add the user.
 
 3. The Cloud SQL Proxy is now running in your original VM SSH window, so we will need a new one to modify and run our application. Open a new SSH window for the `storage-sql-example` VM.
 
@@ -412,7 +412,7 @@ psql --version
 psql "host=127.0.0.1 port=5432 sslmode=disable dbname=communication user=test"
 ```
 
-6. Use the following SQL query to create a table called 'messages'.
+6. Use the following SQL query to create a table called `messages`.
 
 ``` sql
 CREATE TABLE messages(
@@ -421,19 +421,19 @@ CREATE TABLE messages(
 );
 ```
 
-1. To confirm that the table exists, you can run:
+7. To confirm that the table exists, you can run:
 
 ``` sql
 \dt
 ```
 
-7. Leave that window open, and open yet another SSH window to edit your application VM.
+8. Leave that window open, and open yet another SSH window to edit your application VM.
 
 ### Writing to Cloud SQL from our application
 
 The beauty of Cloud SQL, aside from being an easy to use managed service, is that it runs standard versions of SQL (PostgreSQL, MySQL, and SQL Server) and offers the SQL Proxy for easy connection. That means that all we have to do now is install a standard PostgreSQL client library as a dependency for our code to use, and connect on localhost (127.0.0.1)! This name and IP are both ways for a computer to simply refer to itself in networking. The Cloud SQL Proxy pretends that it is a local database, but instead proxies the connections over to the remote instance.
 
-1. In the new VM SSH window (not the one hosting the proxy, or the one that's waiting for the next `communication=>` command), change into the **my-app** folder.
+1. In the new VM SSH window (not the one hosting the proxy, or the one that's waiting for the next `communication=>` command), change into the `my-app` folder.
 
 ``` bash
 cd ~/my-app
@@ -460,7 +460,8 @@ app.get('/add-message', function (req, res) {
 });
 ```
 
-Note, you can find a nice example for what we are about to do [here](https://node-postgres.com/).
+**Note:**<br>
+You can find a nice example for what we are about to do [here](https://node-postgres.com/).
 
 5. Near the top of your code, after the line connecting to the bucket, import the `pg` client class.
 
@@ -480,10 +481,10 @@ const client = new Client({
 });
 ```
 
-**Important Note:**
-You were just instructed to put a password into application code in plain text. In the real world, you should never do that, and especially never check in such code to some Git repo. Also, be sure not to use any real passwords here, simple passwords like 'test' are fine for this lab. Go back to the console and change the password for your user if necessary.
+**Important Note:**<br>
+You were just instructed to put a password into application code in plain text. In the real world, you should never do that, and especially never check in such code to some Git repo. Also, be sure not to use any real passwords here; simple passwords like 'test' are fine for this lab. Go back to the Google Cloud Console and change the password for your user if necessary.
 
-7. Move down the `/add-message` route and update it to look like the following.
+7. Move down to the `/add-message` route and update it to look like the following:
 
 ``` javascript
 app.get('/add-message', function (req, res) {
@@ -500,7 +501,7 @@ app.get('/add-message', function (req, res) {
 });
 ```
 
-8. Save the file, close the editor, and re run your application.
+8. Save the file, close the editor, and re-run your application.
 
 9. Test by visiting the new `add-message` route. Use a URL similar to:
 
@@ -510,23 +511,23 @@ http://[YOUR_VMS_IP]/add-message?message=Cool!
 
 10. Check the window running the application, does it show a successful insert? If not, see if there's an error in the code. 
 
-11. Switch to the window where you are connected to your database. At the `communication=>` prompt, run the following query and verify that your "Cool!" message was inserted. 
+11. Switch to the window where you are connected to your database. At the `communication=>` prompt, run the following query and verify that your "Cool!" message was inserted: 
 
 ``` sql
 select * from messages;
 ```
 
 <!-- ------------------------ -->
-## Bonus:Reading from Cloud SQL
+## Bonus: Reading from Cloud SQL
 Duration: 10
 
 At this point you should have a sense of how to work through this process. If you're feeling brave, and if you have the time, try and create a new route in the application to read back the messages and display them to the page. An outline of the steps might look like:
 
-1. Create a placeholder route and controller method for '/read-messages'.
+1. Create a placeholder route and controller method for `/read-messages`.
 
 2. Use the same SQL client to query the DB for all messages.
 
-3. Use the res object to respond with a string that contains all messages.
+3. Use the `res` object to respond with a string that contains all messages.
 
 If you need help forming the query, [here is another tutorial](https://www.postgresqltutorial.com/postgresql-select/). 
 
