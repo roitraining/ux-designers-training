@@ -6,9 +6,9 @@ status: Draft
 authors: Jordan Hart
 Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform
 
-# Create and List VMs with the CLI
+# Create and List VMs with the CLI and API
 <!-- ------------------------ -->
-## Create and List a VM with the CLI
+## Creating and listing VMs by CLI
 Duration: 3
 
 ### Creating a VM by CLI
@@ -57,7 +57,7 @@ NPM is the primary tool used with Node.js to install packages, run scripts, and 
 
 Since Cloud Shell comes with gcloud installed and configured, and Node.js and NPM installed, we can jump right to using NPM.
 
-### Init NPM and Installing Client Libraries
+### Init NPM and installing client libraries
 
 1. To get started with NPM, init your current directory as an NPM project. Remember, this creates the `package.json`, a Node.js information and dependencies file. Feel free to accept the defaults.
 
