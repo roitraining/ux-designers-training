@@ -123,7 +123,7 @@ Duration: 10
 3. Select **Metrics Explorer**, and set the resource to **VM Instance**. For the metric, enter **CPU load**, and select the one with the 1m visibility. Do you see any data? This is now being reported from inside the VM thanks to the agent, rather than from outside the VM thanks to Google owning the hardware.
 
 <!-- ------------------------ -->
-## BONUS: Installing and testing the Logging agent
+## Bonus: Installing and testing the Logging agent
 Duration: 15
 
 Installing the Logging agent is a bit more of a manual process. The Logging agent passes log messages from code running on VMs, and from standard applications, to Google's Cloud Logging. If you would like to attempt it, please feel free to install the Logging agent using the below as a rough guide.
