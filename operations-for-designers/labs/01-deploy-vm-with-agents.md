@@ -1,4 +1,4 @@
-summary: Deploy a Virtuam Machine on Google Compute Engine and install the Google Cloud Logging and Monitoring agents
+summary: Deploy a Virtual Machine on Google Compute Engine and install the Google Cloud Logging and Monitoring agents
 id: deploy-vm-with-agents
 categories: Operations for UXers
 tags: Google Cloud
@@ -19,10 +19,12 @@ Duration: 1
 - How to view logs and metrics
 
 <!-- ------------------------ -->
-## Create a VM
+## Creating a VM
 Duration: 3
 
-1. Choose a Google Cloud Project to work in. This should be a trial account you created specifically for this course. **Warning:** Using your actual Google account will run you into a number of security related issues. 
+1. Choose a Google Cloud Project to work in. This should be a trial account you created specifically for this course. 
+
+**Warning:** Using your actual Google account will run you into a number of security related issues. 
 
 2. In the Google Cloud Console window, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Compute Engine**.
 
@@ -31,7 +33,7 @@ Duration: 3
 4. After your perusal, click **Create**.
 
 <!-- ------------------------ -->
-## Deploy a basic web application
+## Deploying a basic web application
 Duration: 20
 
 1. Once the `agents-sample` VM finishes creating, open an SSH to it by clicking **SSH** to the right of its name. 
@@ -86,7 +88,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-9. Exit the editor, saving the change. In Node, you can press **CTRL+X** to exit, and then **Y | ENTER** to save the file using the same name.
+9. Exit the editor, saving the change. In Node, you can press **CTRL+X** to exit, and then press **Y | ENTER** to save the file using the same name.
 
 10. Run the application to test it.
 
@@ -106,7 +108,7 @@ Duration: 10
 
 1. In the Google Cloud Console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Monitoring**. Wait while your new monitoring workspace creates.
 
-2. Select **Metrics Explorer**. Set the resource to **VM Instance**, for the metric enter **CPU load**, and then select the one with the 1m visibility. Do you see any data?
+2. Select **Metrics Explorer**, and set the resource to **VM Instance**. For the metric, enter **CPU load**, and then select the one with the 1m visibility. Do you see any data?
 
 3. Click **Dashboards | VM Instances** to see a list of your existing (one) VMs. Is the Monitoring agent installed? That's why the last metric was blank. 
 
@@ -114,11 +116,11 @@ Duration: 10
 ## Installing and testing the Monitoring agent
 Duration: 10
 
-1. In the `Monitoring agent status` column click **Not detected**. Read the information presented, then select **Install Agent**. A Cloud Shell window will launch. Accept the defaults and proceed through the installation.
+1. In the `Monitoring agent status` column, click **Not detected**. Read the information presented, then select **Install Agent**. A Cloud Shell window will launch. Accept the defaults and proceed through the installation.
 
 2. Once the installation completes, close the Cloud Shell window and the installation dialog. Wait a couple of minutes and refresh the page. What does the `Monitoring agent status` column now display? Repeat if the status is still pending.
 
-3. Select **Metrics Explorer**. Set the resource to **VM Instance**, for the metric enter **CPU load**, and select the one with the 1m visibility. Do you see any data? This is now being reported from inside the VM thanks to the agent, rather than from outside the VM thanks to Google owning the hardware.
+3. Select **Metrics Explorer**, and set the resource to **VM Instance**. For the metric, enter **CPU load**, and select the one with the 1m visibility. Do you see any data? This is now being reported from inside the VM thanks to the agent, rather than from outside the VM thanks to Google owning the hardware.
 
 <!-- ------------------------ -->
 ## BONUS: Installing and testing the Logging agent
