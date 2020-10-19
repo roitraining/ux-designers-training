@@ -98,7 +98,7 @@ sudo node index
 
 11. Switch back to the **Compute Engine** page in the Google Cloud Console. Click the VM's external IP address; it should be linkified if you checked the box for **Allow HTTP Access**.
 
-**Important Note:**
+**Important Note:**<br>
 Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
 <!-- ------------------------ -->
