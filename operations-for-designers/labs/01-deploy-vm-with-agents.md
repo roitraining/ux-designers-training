@@ -11,7 +11,7 @@ Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8
 ## Overview
 Duration: 1
 
-### What You’ll Learn
+### What you’ll learn
 
 - How to create a Compute Engine virtual machine using the GUI
 - How to install the Logging and Monitoring agents
@@ -98,7 +98,8 @@ sudo node index
 
 11. Switch back to the **Compute Engine** page in the Google Cloud Console. Click the VM's external IP address; it should be linkified if you checked the box for **Allow HTTP Access**.
 
-**Important Note:** Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
+**Important Note:**
+Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
 <!-- ------------------------ -->
 ## Monitoring and Logging
