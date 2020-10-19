@@ -6,7 +6,7 @@ status: Draft
 authors: Jordan Hart
 Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8-__5eUreZE7EcgqawcjJLaiQQ/viewform
 
-# Interacting with Docker
+# Deploy and Observe an App on GKE
 <!-- ------------------------ -->
 ## Interacting with Docker
 Duration: 20
