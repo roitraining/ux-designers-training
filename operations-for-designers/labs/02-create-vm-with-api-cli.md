@@ -49,7 +49,8 @@ mkdir infra-scripts
 cd infra-scripts
 ```
 
-**Tip:** When referencing an existing file or folder in bash, you can "tab-complete" to avoid typing the entire thing. Type enough characters to be unique, then press the **TAB** key. If there are multiple items that start with those characters, the options will be displayed on the screen for you so you can complete enough characters, and then press **TAB** again.
+**Tip:**<br>
+When referencing an existing file or folder in bash, you can "tab-complete" to avoid typing the entire thing. Type enough characters to be unique, then press the **TAB** key. If there are multiple items that start with those characters, the options will be displayed on the screen for you so you can complete enough characters, and then press **TAB** again.
 
 ### What's NPM?
 
@@ -137,7 +138,8 @@ After:
   });
 ```
 
-**Note:** If you chose to change the zone where the VMs were created earlier in the labs, then you'll have to change the zone here also.
+**Note:**<br>
+If you chose to change the zone where the VMs were created earlier in the labs, then you'll have to change the zone here also.
 
 4. Save the change and execute again. The output should be much cleaner.
 
