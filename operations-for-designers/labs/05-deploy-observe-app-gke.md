@@ -141,7 +141,7 @@ edit index.js
 gcloud builds submit --tag gcr.io/$DEVSHELL_PROJECT_ID/hello-logging-js .
 ```
 
-7. Open the `k8sapp.yaml` file in the Cloud Shell editor and explore the instructions. The first part of the file instructs  Kubernetes to create three hello-logging pods. The second major portion contains a LoadBalancer service which will expose the application to the outside world through a Google Cloud global HTTP load balancer.
+7. Open the `k8sapp.yaml` file in the Cloud Shell editor and explore the instructions. The first part of the file instructs  Kubernetes to create three `hello-logging` pods. The second major portion contains a LoadBalancer service which will expose the application to the outside world through a Google Cloud global HTTP load balancer.
 
 8. In the `k8sapp.yaml` file, change the `replicas` to **1** and replace the **$GCLOUD_PROJECT** with your actual project ID. Remember, your project ID is located on the Home page of your Google Cloud Console and in Qwiklabs, just below your temporary Google Cloud password.
 
