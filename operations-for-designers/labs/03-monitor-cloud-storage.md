@@ -84,7 +84,7 @@ Duration: 15
 
 1. In the Google Cloud Console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Logging**.
 
-2. Just above the log query window, use the **Log name** drop-down menu to select the **Cloud Audit | activity** log. Make sure to **Add** it to the query. Select **Run Query**.
+2. Just above the log query window, use the **Log name** drop-down menu to select the **Cloud Audit > activity** log. Make sure to **Add** it to the query. Select **Run Query**.
 
 3. In the **Log fields** list, select **GCS Bucket** to further filter the results to only display Admin Activity logs (who did what, when?) for Cloud Storage.
 
