@@ -58,9 +58,9 @@ NPM is the primary tool used with Node.js to install packages, run scripts, and 
 
 Since Cloud Shell comes with gcloud installed and configured, and Node.js and NPM installed, we can jump right to using NPM.
 
-### Init NPM and installing client libraries
+### `init` NPM and installing client libraries
 
-1. To get started with NPM, init your current directory as an NPM project. Remember, this creates the `package.json`, a Node.js information and dependencies file. Feel free to accept the defaults.
+1. To get started with NPM, `init` your current directory as an NPM project. Remember, this creates the `package.json`, a Node.js information and dependencies file. Feel free to accept the defaults.
 
 ``` bash
 npm init
@@ -91,7 +91,7 @@ edit list-vms.js
 
 3. Use the **Listing Instances** link to jump to the bottom of the guide.
 
-4. Locate "The complete example" at the very bottom, and copy the example's code. Paste the copied code into the Cloud Shell editor, into `list-vms.js`.
+4. Locate **The complete example** at the very bottom, and copy the example's code. Paste the copied code into the Cloud Shell editor, into `list-vms.js`.
 
 ### Try running your script
 
