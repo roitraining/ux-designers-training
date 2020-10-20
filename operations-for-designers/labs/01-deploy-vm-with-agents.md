@@ -88,7 +88,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-9. Exit the editor, saving the change. In Node, you can press **CTRL+X** to exit, and then press **Y | ENTER** to save the file using the same name.
+9. Exit the editor, saving the change. In Node, you can press **CTRL+X** to exit, and then press **Y > ENTER** to save the file using the same name.
 
 10. Run the application to test it.
 
@@ -99,7 +99,7 @@ sudo node index
 11. Switch back to the **Compute Engine** page in the Google Cloud Console. Click the VM's external IP address; it should be linkified if you checked the box for **Allow HTTP Access**.
 
 **Important Note:**<br>
-Normally you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
+Normally, you would not run Node as root (sudo). We are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
 <!-- ------------------------ -->
 ## Monitoring and Logging
@@ -111,7 +111,7 @@ Duration: 10
 
 2. Select **Metrics Explorer**, and set the resource to **VM Instance**. For the metric, enter **CPU load**, and then select the one with the 1m visibility. Do you see any data?
 
-3. Click **Dashboards | VM Instances** to see a list of your existing (one) VMs. Is the Monitoring agent installed? That's why the last metric was blank. 
+3. Click **Dashboards > VM Instances** to see a list of your existing (one) VMs. Is the Monitoring agent installed? That's why the last metric was blank. 
 
 <!-- ------------------------ -->
 ## Installing and testing the Monitoring agent
