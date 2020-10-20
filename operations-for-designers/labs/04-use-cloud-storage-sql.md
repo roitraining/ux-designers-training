@@ -32,7 +32,7 @@ gcloud compute instances create storage-sql-example --tags=http-server --zone=us
 **Important Note:**<br>
 By default, VMs on Compute Engine come with a Default Service Account that has Project Editor access. Normally, that would be way overkill for a typical application, but fortunately, also by default, the VM's ability to act against Google Cloud's APIs is further limited by scopes (this is only true when using the Compute Engine Default Service Account). Those scopes, by default, are set to allow writing to Cloud Operations, reading from Cloud Storage, and not much else. Here, we are specifying read/write access to Cloud Storage and access to Cloud SQL.
 
-It would be possible to connect to Cloud SQL without this scope, since you can whitelist your VMs IP address and then connect by normal SQL mechanisms. However, here, we are going to use the Cloud SQL Proxy and authenticate through Google. You can read more about [permissions and the SQL Proxy](https://cloud.google.com/sql/docs/postgres/connect-compute-engine#gce-connect-proxy) in the documentation.
+It would be possible to connect to Cloud SQL without this scope, since you can whitelist your VMs IP address and then connect by normal SQL mechanisms. However, here we are going to use the Cloud SQL Proxy and authenticate through Google. You can read more about [permissions and the SQL Proxy](https://cloud.google.com/sql/docs/postgres/connect-compute-engine#gce-connect-proxy) in the documentation.
 
 <!-- ------------------------ -->
 ## Deploying a basic web application
@@ -98,7 +98,7 @@ sudo node index
 10. In the Google Cloud Console, use the **Navigation menu** (![Navigation menu](https://storage.googleapis.com/cloud-training/images/menu.png "Navigation menu")) to navigate to **Compute Engine**. Click the `storage-sql-example` VM's external IP address; it should be linkified because we created it with the `http-server` network tag, thus making it accessible through the firewall. Make sure you see the "Hello World!" message.
 
 **Important Note:**<br> 
-Normally, you would not run Node as root (sudo), we are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
+Normally, you would not run Node as root (sudo). We are doing that here to avoid needing to install and configure Apache or Nginx as a reverse proxy.
 
 <!-- ------------------------ -->
 ## Writing to Cloud Storage
