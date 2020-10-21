@@ -14,8 +14,8 @@ Duration: 1
 ### In this lab, you will:
 
 - Create a machine using the GUI
-- Deploy a basic we application
-- Leverage monitoring and logging
+- Deploy a basic web application
+- Leverage Monitoring and Logging
 
 <!-- ------------------------ -->
 ## Creating a VM
