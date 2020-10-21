@@ -11,12 +11,11 @@ Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8
 ## Overview
 Duration: 1
 
-### What you’ll learn
+### In this lab, you will:
 
-- How to create a Compute Engine virtual machine using the GUI
-- How to install the Logging and Monitoring agents
-- How to deploy a basic web application
-- How to view logs and metrics
+- Create a machine using the GUI
+- Deploy a basic we application
+- Leverage monitoring and logging
 
 <!-- ------------------------ -->
 ## Creating a VM

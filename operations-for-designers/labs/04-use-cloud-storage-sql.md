@@ -11,11 +11,11 @@ Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8
 ## Overview
 Duration: 1
 
-### What you’ll learn
+### In this lab, you will:
 
-- Creating a VM with proper scopes for Cloud SQL and Storage
-- How to interact with Cloud Storage from a VM
-- How to interact with Cloud SQL from a VM
+- Use the CLI to create a VM with appropriate security scopes
+- Create an application that uses the API to read and write to Cloud Storage
+- Modify the application to also write to Cloud SQL through the proxy
 
 <!-- ------------------------ -->
 ## Creating a VM with proper scopes

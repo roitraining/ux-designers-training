@@ -8,6 +8,16 @@ Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8
 
 # Create and List VMs with the CLI and API
 <!-- ------------------------ -->
+## Overview
+Duration: 1
+
+### In this lab, you will:
+
+- Create and list VMs with Google's CLI
+- Install and configure NPM
+- Write code to create and list VMs using the Node.js API
+
+<!-- ------------------------ -->
 ## Creating and listing VMs by CLI
 Duration: 3
 

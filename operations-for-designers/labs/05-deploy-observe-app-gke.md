@@ -8,6 +8,17 @@ Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8
 
 # Deploy and Observe an App on GKE
 <!-- ------------------------ -->
+## Overview
+Duration: 1
+
+### In this lab, you will:
+
+- Interact with docker using its CLI
+- Build and deploy an application to GKE
+- Integrate Google Cloud Logging and Monitoring with GKE
+
+<!-- ------------------------ -->
+
 ## Interacting with Docker
 Duration: 20
 
@@ -220,7 +231,7 @@ kubectl get pod
 # Logging and Monitoring
 <!-- ------------------------ -->
 
-## Logging and Monitoring
+## Enabling and using Logging and Monitoring
 Duration: 20
 
 ### Monitoring

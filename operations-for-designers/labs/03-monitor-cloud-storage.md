@@ -8,6 +8,15 @@ Feedback Link: https://docs.google.com/forms/d/e/1FAIpQLSdakXkk5FhNFFFRnda391WO8
 
 # Monitor Cloud Storage
 <!-- ------------------------ -->
+## Overview
+Duration: 1
+
+### In this lab, you will:
+
+- Create and use a Google Cloud Storage bucket
+- Leverage Monitoring, Logging, and Alerting for your bucket
+
+<!-- ------------------------ -->
 ## Interacting with Cloud Storage
 Duration: 20
 
