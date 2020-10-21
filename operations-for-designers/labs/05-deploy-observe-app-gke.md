@@ -13,7 +13,7 @@ Duration: 1
 
 ### In this lab, you will:
 
-- Interact with docker using its CLI
+- Interact with Docker using its CLI
 - Build and deploy an application to GKE
 - Integrate Google Cloud Logging and Monitoring with GKE
 
