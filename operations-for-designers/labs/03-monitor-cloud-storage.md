@@ -13,8 +13,8 @@ Duration: 1
 
 ### In this lab, you will:
 
-- Create and use a Google Cloud Storage bucket
-- Leverage Monitoring, Logging, and Alerting for your bucket
+- Create and use a Cloud Storage bucket
+- Leverage Monitoring, Logging, and alerting for your bucket
 
 <!-- ------------------------ -->
 ## Interacting with Cloud Storage
